@@ -1,0 +1,63 @@
+{
+  "titulo": "Usuarios",
+  "vacio": "No hay usuarios que coincidan con los filtros.",
+  "campos": {
+    "nombreUsuario": "Nombre de usuario",
+    "nombreCompleto": "Nombre completo",
+    "rol": "Rol",
+    "estado": "Estado",
+    "contrasenaTemporal": "Contraseña temporal"
+  },
+  "estado": {
+    "activo": "Activo",
+    "inactivo": "Inactivo",
+    "bloqueado": "Bloqueado",
+    "temporal": "Contraseña temporal"
+  },
+  "filtros": {
+    "etiqueta": "Filtros de usuarios",
+    "buscar": "Buscar por usuario o nombre",
+    "todos": "Todos"
+  },
+  "acciones": {
+    "nuevo": "Nuevo usuario",
+    "activar": "Activar",
+    "desactivar": "Desactivar",
+    "restablecer": "Restablecer contraseña"
+  },
+  "ayuda": {
+    "nombreUsuario": "Entre 3 y 50 caracteres: letras, números, punto, guion o guion bajo. Se guarda en minúsculas y no se puede cambiar.",
+    "rol": "El rol define qué opciones puede usar.",
+    "rolPropio": "No puedes cambiar tu propio rol.",
+    "contrasenaTemporal": "Entre 8 y 72 caracteres, con letra y número. La persona deberá cambiarla al ingresar.",
+    "propio": "No puedes aplicar esta acción a tu propia cuenta."
+  },
+  "validacion": {
+    "nombreUsuario": "Entre 3 y 50 caracteres: letras, números, punto, guion o guion bajo, sin espacios."
+  },
+  "errores": {
+    "duplicado": "Ya existe un usuario con ese nombre."
+  },
+  "dialogo": {
+    "tituloNuevo": "Nuevo usuario",
+    "tituloEditar": "Editar usuario {{usuario}}"
+  },
+  "restablecer": {
+    "titulo": "Restablecer contraseña",
+    "descripcion": "Asigna una contraseña temporal a {{usuario}}. Se desbloqueará la cuenta y se cerrarán sus sesiones abiertas.",
+    "boton": "Restablecer"
+  },
+  "confirmar": {
+    "tituloDesactivar": "Desactivar usuario",
+    "tituloActivar": "Activar usuario",
+    "desactivar": "{{usuario}} no podrá ingresar y se cerrarán sus sesiones abiertas. Su historial se conserva.",
+    "activar": "{{usuario}} podrá volver a ingresar."
+  },
+  "avisos": {
+    "creado": "Usuario {{usuario}} creado.",
+    "actualizado": "Usuario {{usuario}} actualizado.",
+    "desactivado": "Usuario {{usuario}} desactivado.",
+    "activado": "Usuario {{usuario}} activado.",
+    "restablecido": "Contraseña temporal asignada a {{usuario}}."
+  }
+}

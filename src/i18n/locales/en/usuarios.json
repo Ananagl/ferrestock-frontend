@@ -1,0 +1,63 @@
+{
+  "titulo": "Users",
+  "vacio": "No users match the filters.",
+  "campos": {
+    "nombreUsuario": "Username",
+    "nombreCompleto": "Full name",
+    "rol": "Role",
+    "estado": "Status",
+    "contrasenaTemporal": "Temporary password"
+  },
+  "estado": {
+    "activo": "Active",
+    "inactivo": "Inactive",
+    "bloqueado": "Locked",
+    "temporal": "Temporary password"
+  },
+  "filtros": {
+    "etiqueta": "User filters",
+    "buscar": "Search by username or name",
+    "todos": "All"
+  },
+  "acciones": {
+    "nuevo": "New user",
+    "activar": "Activate",
+    "desactivar": "Deactivate",
+    "restablecer": "Reset password"
+  },
+  "ayuda": {
+    "nombreUsuario": "3 to 50 characters: letters, numbers, dot, hyphen or underscore. Stored in lowercase and cannot be changed.",
+    "rol": "The role defines which options are available.",
+    "rolPropio": "You cannot change your own role.",
+    "contrasenaTemporal": "8 to 72 characters, with a letter and a number. The person must change it when signing in.",
+    "propio": "You cannot apply this action to your own account."
+  },
+  "validacion": {
+    "nombreUsuario": "3 to 50 characters: letters, numbers, dot, hyphen or underscore, no spaces."
+  },
+  "errores": {
+    "duplicado": "A user with that name already exists."
+  },
+  "dialogo": {
+    "tituloNuevo": "New user",
+    "tituloEditar": "Edit user {{usuario}}"
+  },
+  "restablecer": {
+    "titulo": "Reset password",
+    "descripcion": "Assign a temporary password to {{usuario}}. The account will be unlocked and their open sessions closed.",
+    "boton": "Reset"
+  },
+  "confirmar": {
+    "tituloDesactivar": "Deactivate user",
+    "tituloActivar": "Activate user",
+    "desactivar": "{{usuario}} will not be able to sign in and their open sessions will be closed. Their history is kept.",
+    "activar": "{{usuario}} will be able to sign in again."
+  },
+  "avisos": {
+    "creado": "User {{usuario}} created.",
+    "actualizado": "User {{usuario}} updated.",
+    "desactivado": "User {{usuario}} deactivated.",
+    "activado": "User {{usuario}} activated.",
+    "restablecido": "Temporary password assigned to {{usuario}}."
+  }
+}

@@ -14,7 +14,10 @@
     "alternarClaro": "Cambiar a tema claro"
   },
   "estado": {
-    "cargando": "Cargando…"
+    "cargando": "Cargando…",
+    "error": "No fue posible cargar la información.",
+    "sinConexion": "No hay conexión con el servidor.",
+    "codigo": "código"
   },
   "formulario": {
     "mostrarContrasena": "Mostrar contraseña",
@@ -56,5 +59,22 @@
     "titulo": "Acceso denegado",
     "mensaje": "Tu rol no tiene permiso para ver esta pantalla.",
     "volver": "Volver al inicio"
+  },
+  "acciones": {
+    "cancelar": "Cancelar",
+    "guardar": "Guardar",
+    "editar": "Editar",
+    "reintentar": "Reintentar"
+  },
+  "tabla": {
+    "acciones": "Acciones",
+    "filasPorPagina": "Filas por página",
+    "rango": "{{desde}}–{{hasta}} de {{total}}",
+    "ir": {
+      "first": "Primera página",
+      "last": "Última página",
+      "next": "Página siguiente",
+      "previous": "Página anterior"
+    }
   }
 }
