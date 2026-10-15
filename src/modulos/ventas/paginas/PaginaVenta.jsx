@@ -4,7 +4,7 @@
  * Fecha de creación:      2026-10-15
  * Fecha de actualización: 2026-10-15
  * Autores:                Ana Sofía Nagles García, María Mercedes Rincón Valencia, Juan David Camacho Tapiero
- * Versión:                0.8.0
+ * Versión:                0.9.0
  * @file
  */
 import { useEffect, useState } from 'react';
@@ -12,6 +12,7 @@ import { Link as EnlaceRuta, useParams } from 'react-router-dom';
 import { Alert, Box, Button, Stack, Typography } from '@mui/material';
 import ArrowBackOutlined from '@mui/icons-material/ArrowBackOutlined';
 import BlockOutlined from '@mui/icons-material/BlockOutlined';
+import AssignmentReturnOutlined from '@mui/icons-material/AssignmentReturnOutlined';
 import { useTranslation } from 'react-i18next';
 import { useSesion } from '../../../app/proveedores/ProveedorSesion.jsx';
 import { useNotificar } from '../../../app/proveedores/ProveedorNotificaciones.jsx';
@@ -73,11 +74,18 @@ export default function PaginaVenta() {
             <Typography variant="h1">{t('ventas:detalle.titulo', { consecutivo: venta.consecutivo })}</Typography>
             <ChipEstadoDocumento estado={venta.estado} />
           </Stack>
-          {esAdmin && venta.estado === 'REGISTRADA' && (
-            <Button color="error" variant="outlined" startIcon={<BlockOutlined />} onClick={() => setAnulando(true)}>
-              {t('documentos:acciones.anular')}
-            </Button>
-          )}
+          <Stack direction="row" spacing={1} useFlexGap sx={{ flexWrap: 'wrap' }}>
+            {venta.estado === 'REGISTRADA' && (
+              <Button component={EnlaceRuta} to={`/devoluciones/nueva?venta=${venta.id}`} variant="outlined" startIcon={<AssignmentReturnOutlined />}>
+                {t('devoluciones:acciones.desdeVenta')}
+              </Button>
+            )}
+            {esAdmin && venta.estado === 'REGISTRADA' && (
+              <Button color="error" variant="outlined" startIcon={<BlockOutlined />} onClick={() => setAnulando(true)}>
+                {t('documentos:acciones.anular')}
+              </Button>
+            )}
+          </Stack>
         </Box>
       </Box>
       {venta.estado === 'ANULADA' && (

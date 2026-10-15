@@ -4,7 +4,7 @@
  * Fecha de creación:      2026-10-15
  * Fecha de actualización: 2026-10-15
  * Autores:                Ana Sofía Nagles García, María Mercedes Rincón Valencia, Juan David Camacho Tapiero
- * Versión:                0.8.0
+ * Versión:                0.9.0
  * @file
  */
 import { lazy, Suspense } from 'react';
@@ -32,6 +32,9 @@ const PaginaCompra = lazy(() => import('./modulos/compras/paginas/PaginaCompra.j
 const PaginaVentas = lazy(() => import('./modulos/ventas/paginas/PaginaVentas.jsx'));
 const PaginaNuevaVenta = lazy(() => import('./modulos/ventas/paginas/PaginaNuevaVenta.jsx'));
 const PaginaVenta = lazy(() => import('./modulos/ventas/paginas/PaginaVenta.jsx'));
+const PaginaDevoluciones = lazy(() => import('./modulos/devoluciones/paginas/PaginaDevoluciones.jsx'));
+const PaginaNuevaDevolucion = lazy(() => import('./modulos/devoluciones/paginas/PaginaNuevaDevolucion.jsx'));
+const PaginaDevolucion = lazy(() => import('./modulos/devoluciones/paginas/PaginaDevolucion.jsx'));
 
 /**
  * Rutas de la aplicación.
@@ -58,6 +61,9 @@ export default function App() {
               <Route path="/ventas" element={<PaginaVentas />} />
               <Route path="/ventas/nueva" element={<PaginaNuevaVenta />} />
               <Route path="/ventas/:id" element={<PaginaVenta />} />
+              <Route path="/devoluciones" element={<PaginaDevoluciones />} />
+              <Route path="/devoluciones/nueva" element={<PaginaNuevaDevolucion />} />
+              <Route path="/devoluciones/:id" element={<PaginaDevolucion />} />
               <Route element={<RutaProtegida roles={['ADMIN']} />}>
                 <Route path="/usuarios" element={<PaginaUsuarios />} />
                 <Route path="/categorias" element={<PaginaCategorias />} />
