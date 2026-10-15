@@ -1,0 +1,5 @@
+{
+  "source": { "include": ["src"], "includePattern": "\\.(js|jsx)$", "exclude": ["src/pruebas"] },
+  "plugins": ["plugins/markdown"],
+  "opts": { "destination": "docs-generados/jsdoc", "recurse": true, "encoding": "utf8" }
+}

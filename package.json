@@ -1,0 +1,50 @@
+{
+  "name": "ferrestock-frontend",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Interfaz web de FerreStock (React + Material UI). Autores: Ana Sofía Nagles García, María Mercedes Rincón Valencia, Juan David Camacho Tapiero. Creado: 2026-10-15.",
+  "author": "Ana Sofía Nagles García, María Mercedes Rincón Valencia, Juan David Camacho Tapiero",
+  "type": "module",
+  "engines": {
+    "node": ">=20.19.0"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "lint": "eslint .",
+    "verificar:i18n": "node scripts/verificar-i18n.mjs",
+    "test": "npm run lint && npm run verificar:i18n",
+    "test:e2e": "playwright test",
+    "docs": "jsdoc -c jsdoc.json"
+  },
+  "dependencies": {
+    "@emotion/react": "11.14.0",
+    "@emotion/styled": "11.14.1",
+    "@fontsource/inter": "5.3.0",
+    "@mui/icons-material": "9.5.0",
+    "@mui/material": "9.5.0",
+    "axios": "1.20.0",
+    "formik": "2.4.9",
+    "i18next": "26.4.5",
+    "i18next-browser-languagedetector": "8.2.1",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "react-i18next": "17.0.16",
+    "react-router-dom": "7.18.4",
+    "yup": "1.7.1"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "4.13.0",
+    "@eslint/js": "10.0.1",
+    "@playwright/test": "1.64.1",
+    "@vitejs/plugin-react": "6.1.2",
+    "eslint": "10.12.0",
+    "eslint-plugin-react-hooks": "7.1.1",
+    "eslint-plugin-react-refresh": "0.5.7",
+    "globals": "17.13.0",
+    "jsdoc": "4.0.5",
+    "selenium-webdriver": "4.51.0",
+    "vite": "8.3.4"
+  }
+}
