@@ -90,11 +90,13 @@ test.describe('Ventas como administrador', () => {
     api = await instalarApiSimulada(page, { sesionInicial: 'admin' });
   });
 
-  test('ve el costo de las líneas y anula una venta con motivo (CA-VEN-05)', async ({ page }) => {
+  test('ve el costo de las líneas y anula una venta con motivo (CA-VEN-05)', async ({ page, isMobile }) => {
     await page.goto('/ventas');
     await page.getByRole('link', { name: 'Ver detalle VEN-000001' }).click();
     await expect(page.getByRole('heading', { level: 1, name: 'Venta VEN-000001' })).toBeVisible();
-    await expect(page.getByRole('columnheader', { name: 'Costo' })).toBeVisible();
+    // En móvil las líneas son tarjetas con etiqueta y valor; en escritorio, una tabla
+    if (isMobile) await expect(page.getByRole('list', { name: 'Líneas' }).getByText('Costo', { exact: true })).toBeVisible();
+    else await expect(page.getByRole('columnheader', { name: 'Costo' })).toBeVisible();
     await page.getByRole('button', { name: 'Anular' }).click();
     const dialogo = page.getByRole('dialog', { name: 'Anular la venta VEN-000001' });
     await dialogo.getByLabel('Motivo de la anulación').fill('Cliente desistió de la compra');
