@@ -75,5 +75,9 @@
     "actualizado": "{{nombre}} actualizado.",
     "activado": "{{nombre}} activado.",
     "desactivado": "{{nombre}} desactivado."
+  },
+  "buscador": {
+    "ayuda": "Escriba nombre o documento",
+    "sinResultados": "No se encontraron terceros."
   }
 }

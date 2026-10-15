@@ -1,0 +1,36 @@
+{
+  "titulo": "Purchases",
+  "vacio": "No purchases match the filters.",
+  "filtros": "Purchase filters",
+  "campos": {
+    "proveedor": "Supplier",
+    "observacion": "Note",
+    "costoUnitario": "Unit cost"
+  },
+  "ayuda": {
+    "observacion": "Optional: for example, the supplier's invoice number."
+  },
+  "acciones": {
+    "nueva": "New purchase",
+    "registrar": "Record purchase",
+    "volver": "Back to purchases"
+  },
+  "nueva": {
+    "titulo": "New purchase",
+    "ayuda": "Goods are received in full when recorded: stock goes up and the average cost is recalculated."
+  },
+  "detalle": {
+    "titulo": "Purchase {{consecutivo}}"
+  },
+  "anular": {
+    "titulo": "Void purchase {{consecutivo}}",
+    "mensaje": "The purchased quantities will be removed from stock and the previous average cost restored. This is only possible if those units have not been sold and there were no later inbound movements."
+  },
+  "validacion": {
+    "costoFormato": "Up to 12 integer digits and 4 decimals, no negative values."
+  },
+  "avisos": {
+    "registrada": "Purchase {{consecutivo}} recorded.",
+    "anulada": "Purchase {{consecutivo}} voided."
+  }
+}

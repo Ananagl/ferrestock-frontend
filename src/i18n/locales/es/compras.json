@@ -1,0 +1,36 @@
+{
+  "titulo": "Compras",
+  "vacio": "No hay compras que coincidan con los filtros.",
+  "filtros": "Filtros de compras",
+  "campos": {
+    "proveedor": "Proveedor",
+    "observacion": "Observación",
+    "costoUnitario": "Costo unitario"
+  },
+  "ayuda": {
+    "observacion": "Opcional: por ejemplo, el número de la factura del proveedor."
+  },
+  "acciones": {
+    "nueva": "Nueva compra",
+    "registrar": "Registrar compra",
+    "volver": "Volver a compras"
+  },
+  "nueva": {
+    "titulo": "Nueva compra",
+    "ayuda": "La mercancía se recibe completa al registrar: suben las existencias y se recalcula el costo promedio."
+  },
+  "detalle": {
+    "titulo": "Compra {{consecutivo}}"
+  },
+  "anular": {
+    "titulo": "Anular la compra {{consecutivo}}",
+    "mensaje": "Se retirarán del inventario las cantidades compradas y se restaurará el costo promedio anterior. Solo es posible si no se han vendido esas unidades ni hubo entradas posteriores."
+  },
+  "validacion": {
+    "costoFormato": "Hasta 12 dígitos enteros y 4 decimales, sin valores negativos."
+  },
+  "avisos": {
+    "registrada": "Compra {{consecutivo}} registrada.",
+    "anulada": "Compra {{consecutivo}} anulada."
+  }
+}

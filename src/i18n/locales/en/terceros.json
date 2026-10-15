@@ -75,5 +75,9 @@
     "actualizado": "{{nombre}} updated.",
     "activado": "{{nombre}} activated.",
     "desactivado": "{{nombre}} deactivated."
+  },
+  "buscador": {
+    "ayuda": "Type name or document",
+    "sinResultados": "No third parties found."
   }
 }

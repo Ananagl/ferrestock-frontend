@@ -4,7 +4,7 @@
  * Fecha de creación:      2026-10-15
  * Fecha de actualización: 2026-10-15
  * Autores:                Ana Sofía Nagles García, María Mercedes Rincón Valencia, Juan David Camacho Tapiero
- * Versión:                0.2.0
+ * Versión:                0.8.0
  * @file
  */
 
@@ -32,4 +32,29 @@ export function leerProblema(error) {
     errores: Object.fromEntries((datos.errores ?? []).map((e) => [e.campo, e.mensaje])),
     correlacion: datos.correlacion,
   };
+}
+
+/**
+ * Convierte los errores por campo del backend (por ejemplo {@code lineas[1].cantidad} o {@code proveedorId}) en el
+ * objeto anidado que espera Formik, renombrando los campos que en el formulario se llaman distinto.
+ * @param {Record<string,string>} errores - Errores planos de {@link leerProblema}.
+ * @param {Record<string,string>} [renombres] - Último segmento del backend → nombre en el formulario (productoId → producto).
+ * @returns {Record<string, any>} Errores anidados.
+ */
+export function erroresFormik(errores, renombres = {}) {
+  const resultado = {};
+  Object.entries(errores).forEach(([campo, mensaje]) => {
+    const partes = campo.replace(/\[(\d+)\]/g, '.$1').split('.');
+    const ultimo = partes.length - 1;
+    partes[ultimo] = renombres[partes[ultimo]] ?? partes[ultimo];
+    let nodo = resultado;
+    partes.forEach((parte, i) => {
+      if (i === ultimo) nodo[parte] = mensaje;
+      else {
+        nodo[parte] ??= /^\d+$/.test(partes[i + 1]) ? [] : {};
+        nodo = nodo[parte];
+      }
+    });
+  });
+  return resultado;
 }

@@ -1,0 +1,44 @@
+{
+  "campos": {
+    "consecutivo": "Consecutivo",
+    "fecha": "Fecha",
+    "estado": "Estado",
+    "total": "Total",
+    "subtotal": "Subtotal",
+    "producto": "Producto",
+    "cantidad": "Cantidad",
+    "usuario": "Registró"
+  },
+  "estados": {
+    "REGISTRADA": "Registrada",
+    "ANULADA": "Anulada"
+  },
+  "filtros": {
+    "todos": "Todos",
+    "desde": "Desde",
+    "hasta": "Hasta"
+  },
+  "acciones": {
+    "ver": "Ver detalle",
+    "anular": "Anular"
+  },
+  "lineas": {
+    "titulo": "Líneas",
+    "agregar": "Agregar línea",
+    "quitar": "Quitar línea",
+    "quitarNumero": "Quitar la línea {{numero}}",
+    "linea": "Línea {{numero}}"
+  },
+  "anulacion": {
+    "motivo": "Motivo de la anulación",
+    "confirmar": "Anular documento",
+    "resumen": "Anulado por {{usuario}} el {{fecha}}. Motivo: {{motivo}}"
+  },
+  "validacion": {
+    "cantidadFormato": "Ingrese una cantidad mayor que cero, con máximo 3 decimales.",
+    "cantidadEntera": "Use una cantidad entera: este producto no se vende en fracciones.",
+    "repetido": "El producto ya está en otra línea.",
+    "sinLineas": "Agregue al menos una línea."
+  },
+  "noExiste": "El documento no existe."
+}
