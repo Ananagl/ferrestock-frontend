@@ -1,0 +1,13 @@
+{
+  "titulo": "Auditoría",
+  "subtitulo": "Eventos registrados por el sistema. No se pueden modificar ni eliminar.",
+  "vacio": "No hay eventos que coincidan con los filtros.",
+  "filtros": "Filtros de auditoría",
+  "buscar": "Buscar en la descripción",
+  "campos": {
+    "fecha": "Fecha y hora",
+    "usuario": "Usuario",
+    "accion": "Acción",
+    "descripcion": "Descripción"
+  }
+}

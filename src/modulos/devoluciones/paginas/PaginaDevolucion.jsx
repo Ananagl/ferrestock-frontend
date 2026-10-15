@@ -4,13 +4,14 @@
  * Fecha de creación:      2026-10-15
  * Fecha de actualización: 2026-10-15
  * Autores:                Ana Sofía Nagles García, María Mercedes Rincón Valencia, Juan David Camacho Tapiero
- * Versión:                0.9.0
+ * Versión:                0.10.0
  * @file
  */
 import { useEffect, useState } from 'react';
 import { Link as EnlaceRuta, useParams } from 'react-router-dom';
 import { Alert, Box, Button, Chip, Link, Stack, Typography } from '@mui/material';
 import ArrowBackOutlined from '@mui/icons-material/ArrowBackOutlined';
+import ReceiptLongOutlined from '@mui/icons-material/ReceiptLongOutlined';
 import { useTranslation } from 'react-i18next';
 import { useSesion } from '../../../app/proveedores/ProveedorSesion.jsx';
 import { leerProblema } from '../../../servicios/api/problemas.js';
@@ -64,7 +65,10 @@ export default function PaginaDevolucion() {
     <Stack spacing={3}>
       <Box>
         {volver}
-        <Typography variant="h1">{t('devoluciones:detalle.titulo', { consecutivo: devolucion.consecutivo })}</Typography>
+        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, alignItems: 'center', justifyContent: 'space-between' }}>
+          <Typography variant="h1">{t('devoluciones:detalle.titulo', { consecutivo: devolucion.consecutivo })}</Typography>
+          <Button component={EnlaceRuta} to={`/comprobantes/DEVOLUCION/${devolucion.consecutivo}`} variant="outlined" startIcon={<ReceiptLongOutlined />}>{t('comprobantes:acciones.ver')}</Button>
+        </Box>
       </Box>
       <DetalleDocumento datos={datos} columnas={columnas} lineas={devolucion.lineas} titulo={t('documentos:lineas.titulo')}
         totales={[

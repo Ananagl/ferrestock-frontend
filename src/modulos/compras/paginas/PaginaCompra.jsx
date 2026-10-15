@@ -4,13 +4,14 @@
  * Fecha de creación:      2026-10-15
  * Fecha de actualización: 2026-10-15
  * Autores:                Ana Sofía Nagles García, María Mercedes Rincón Valencia, Juan David Camacho Tapiero
- * Versión:                0.8.0
+ * Versión:                0.10.0
  * @file
  */
 import { useEffect, useState } from 'react';
 import { Link as EnlaceRuta, useParams } from 'react-router-dom';
 import { Alert, Box, Button, Stack, Typography } from '@mui/material';
 import ArrowBackOutlined from '@mui/icons-material/ArrowBackOutlined';
+import ReceiptLongOutlined from '@mui/icons-material/ReceiptLongOutlined';
 import BlockOutlined from '@mui/icons-material/BlockOutlined';
 import { useTranslation } from 'react-i18next';
 import { useSesion } from '../../../app/proveedores/ProveedorSesion.jsx';
@@ -69,11 +70,14 @@ export default function PaginaCompra() {
             <Typography variant="h1">{t('compras:detalle.titulo', { consecutivo: compra.consecutivo })}</Typography>
             <ChipEstadoDocumento estado={compra.estado} />
           </Stack>
+          <Stack direction="row" spacing={1} useFlexGap sx={{ flexWrap: 'wrap' }}>
+            <Button component={EnlaceRuta} to={`/comprobantes/COMPRA/${compra.consecutivo}`} variant="outlined" startIcon={<ReceiptLongOutlined />}>{t('comprobantes:acciones.ver')}</Button>
           {usuario.rol === 'ADMIN' && compra.estado === 'REGISTRADA' && (
             <Button color="error" variant="outlined" startIcon={<BlockOutlined />} onClick={() => setAnulando(true)}>
               {t('documentos:acciones.anular')}
             </Button>
           )}
+          </Stack>
         </Box>
       </Box>
       {compra.estado === 'ANULADA' && (

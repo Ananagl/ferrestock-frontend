@@ -1,0 +1,49 @@
+{
+  "titulo": "Receipts",
+  "vacio": "No receipts match the filters.",
+  "filtros": "Receipt filters",
+  "buscar": "Search by number",
+  "campos": {
+    "tipo": "Type",
+    "tercero": "Customer, supplier or product",
+    "usuario": "Recorded by",
+    "motivo": "Reason",
+    "detalle": "Detail"
+  },
+  "tipos": {
+    "VENTA": "Sale",
+    "COMPRA": "Purchase",
+    "DEVOLUCION": "Return",
+    "AJUSTE": "Adjustment"
+  },
+  "tercero": {
+    "VENTA": "Customer",
+    "COMPRA": "Supplier",
+    "DEVOLUCION": "Customer"
+  },
+  "referencia": {
+    "COMPRA": "Note",
+    "DEVOLUCION": "Original sale"
+  },
+  "valor": {
+    "VENTA": "Price",
+    "COMPRA": "Unit cost",
+    "AJUSTE": "Unit cost",
+    "DEVOLUCION": "Amount"
+  },
+  "detalle": {
+    "ACEPTADA": "Accepted",
+    "RECHAZADA": "Rejected",
+    "ENTRADA": "Inbound",
+    "SALIDA": "Outbound"
+  },
+  "pago": {
+    "recibido": "Cash received",
+    "cambio": "Change"
+  },
+  "acciones": {
+    "ver": "View receipt",
+    "imprimir": "Print",
+    "volver": "Back"
+  }
+}
