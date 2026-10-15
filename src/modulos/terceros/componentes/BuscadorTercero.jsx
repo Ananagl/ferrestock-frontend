@@ -4,7 +4,7 @@
  * Fecha de creación:      2026-10-15
  * Fecha de actualización: 2026-10-15
  * Autores:                Ana Sofía Nagles García, María Mercedes Rincón Valencia, Juan David Camacho Tapiero
- * Versión:                0.8.0
+ * Versión:                0.9.0
  * @file
  */
 import { useEffect, useState } from 'react';
@@ -52,7 +52,8 @@ export function BuscadorTercero({ id, label, rol, value, onChange, soloActivos =
       onInputChange={(_, nuevo) => setTexto(nuevo)}
       options={value && !opciones.some((o) => o.id === value.id) ? [value, ...opciones] : opciones}
       filterOptions={(x) => x}
-      getOptionLabel={(x) => `${x.nombre} — ${formatoDocumento(x)}`}
+      // Un tercero precargado (por ejemplo, desde una venta) puede no traer el documento: se muestra solo el nombre
+      getOptionLabel={(x) => (x.numeroDocumento ? `${x.nombre} — ${formatoDocumento(x)}` : x.nombre)}
       isOptionEqualToValue={(a, b) => a.id === b.id}
       loading={cargando}
       loadingText={t('estado.cargando')}
