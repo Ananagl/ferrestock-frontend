@@ -4,7 +4,7 @@
  * Fecha de creación:      2026-10-15
  * Fecha de actualización: 2026-10-15
  * Autores:                Ana Sofía Nagles García, María Mercedes Rincón Valencia, Juan David Camacho Tapiero
- * Versión:                0.8.0
+ * Versión:                0.9.0
  * @file
  */
 import { calcularDigitoNit } from '../../../compartido/utilidades/nit.js';
@@ -99,6 +99,8 @@ export async function instalarApiSimulada(page, opciones = {}) {
       anuladaEn: null, usuario: 'operador', lineas: [{ id: 1, productoId: 10, productoCodigo: 'FER-001', productoNombre: 'Martillo de uña 16 oz',
         cantidad: '3.000', precioUnitario: '35000.00', subtotal: '105000.00', cantidadDevuelta: '0.000', costoUnitario: '20000.0000' }] },
   ];
+  // Devoluciones (incremento 9)
+  const devoluciones = [];
   const tabla = Object.values(USUARIOS).map((u) => ({
     id: u.id, nombreUsuario: u.nombreUsuario, nombreCompleto: u.nombreCompleto, rol: u.rol, activo: true,
     bloqueado: Boolean(u.bloqueado), debeCambiarPassword: u.debeCambiarPassword,
@@ -156,6 +158,7 @@ export async function instalarApiSimulada(page, opciones = {}) {
     if (camino.startsWith('/ajustes')) return responderAjustes(ruta, metodo, cuerpo);
     if (camino.startsWith('/compras')) return responderCompras(ruta, metodo, camino, cuerpo);
     if (camino.startsWith('/ventas')) return responderVentas(ruta, metodo, camino, cuerpo);
+    if (camino.startsWith('/devoluciones')) return responderDevoluciones(ruta, metodo, camino, cuerpo);
     return ruta.fulfill(problema(404, 'NO_ENCONTRADO', 'No encontrado'));
   });
 
@@ -489,6 +492,45 @@ export async function instalarApiSimulada(page, opciones = {}) {
     });
     Object.assign(venta, { estado: 'ANULADA', motivoAnulacion: cuerpo.motivo, anuladaPor: actual.nombreUsuario, anuladaEn: new Date().toISOString() });
     return ruta.fulfill({ json: vistaVenta(venta) });
+  }
+
+  /** Simula la API de devoluciones: con venta valida lo vendido y pondera al costo histórico; sin venta, al CPP vigente. */
+  function responderDevoluciones(ruta, metodo, camino, cuerpo) {
+    const id = Number(camino.split('/')[2]);
+    if (metodo === 'GET' && camino === '/devoluciones') return pagina(ruta, [...devoluciones].reverse().map((d) => ({ ...d, lineas: undefined })));
+    if (metodo === 'GET') {
+      const devolucion = devoluciones.find((d) => d.id === id);
+      return devolucion ? ruta.fulfill({ json: devolucion }) : ruta.fulfill(problema(404, 'NO_ENCONTRADO', 'No encontrado'));
+    }
+    const cliente = terceros.find((x) => x.id === cuerpo.clienteId);
+    const venta = cuerpo.ventaId ? ventas.find((v) => v.id === cuerpo.ventaId) : null;
+    const nueva = { id: devoluciones.length + 1, consecutivo: `DEV-${String(devoluciones.length + 1).padStart(6, '0')}`,
+      fecha: new Date().toISOString(), clienteId: cliente.id, clienteNombre: cliente.nombre, ventaId: venta?.id ?? null,
+      ventaConsecutivo: venta?.consecutivo ?? null, motivo: cuerpo.motivo, validadaPor: actual.nombreUsuario, aceptadas: 0, rechazadas: 0, lineas: [] };
+    for (let i = 0; i < cuerpo.lineas.length; i += 1) {
+      const l = cuerpo.lineas[i];
+      const vendida = venta?.lineas.find((x) => x.productoId === l.productoId);
+      if (vendida && l.resultado === 'ACEPTADA' && Number(vendida.cantidadDevuelta) + Number(l.cantidad) > Number(vendida.cantidad)) {
+        return ruta.fulfill(problema(409, 'DEVOLUCION_EXCEDE_VENDIDO', 'No se puede devolver más de lo vendido.',
+          { errores: [{ campo: `lineas[${i}].cantidad`, mensaje: `Se vendieron ${Number(vendida.cantidad)} y ya se devolvieron ${Number(vendida.cantidadDevuelta)}.` }] }));
+      }
+    }
+    cuerpo.lineas.forEach((l, i) => {
+      const producto = productos.find((p) => p.id === l.productoId);
+      const vendida = venta?.lineas.find((x) => x.productoId === l.productoId);
+      const aceptada = l.resultado === 'ACEPTADA';
+      const costo = vendida ? Number(vendida.costoUnitario) : Number(costos[producto.id] ?? 0);
+      if (aceptada) {
+        if (vendida) vendida.cantidadDevuelta = (Number(vendida.cantidadDevuelta) + Number(l.cantidad)).toFixed(3);
+        mover(producto, 'DEVOLUCION', 'ENTRADA', Number(l.cantidad), costo, 'DEVOLUCION', nueva.id, { pondera: Boolean(vendida) });
+        nueva.aceptadas += 1;
+      } else nueva.rechazadas += 1;
+      nueva.lineas.push({ id: 300 + i, productoId: producto.id, productoCodigo: producto.codigo, productoNombre: producto.nombre,
+        cantidad: Number(l.cantidad).toFixed(3), resultado: l.resultado,
+        costoUnitario: aceptada && actual.rol === 'ADMIN' ? costo.toFixed(4) : undefined });
+    });
+    devoluciones.push(nueva);
+    return ruta.fulfill({ status: 201, json: nueva });
   }
 
   /** Simula la API de terceros con las reglas del backend (DV del NIT, duplicados, rol requerido). */
