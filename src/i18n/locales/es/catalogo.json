@@ -90,5 +90,9 @@
     "categoriaActualizada": "Categoría {{nombre}} actualizada.",
     "categoriaActivada": "Categoría {{nombre}} activada.",
     "categoriaDesactivada": "Categoría {{nombre}} desactivada."
+  },
+  "buscador": {
+    "ayuda": "Escriba código o nombre",
+    "sinResultados": "No se encontraron productos."
   }
 }

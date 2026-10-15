@@ -4,7 +4,7 @@
  * Fecha de creación:      2026-10-15
  * Fecha de actualización: 2026-10-15
  * Autores:                Ana Sofía Nagles García, María Mercedes Rincón Valencia, Juan David Camacho Tapiero
- * Versión:                0.6.0
+ * Versión:                0.7.0
  * @file
  */
 import { useCallback, useEffect, useState } from 'react';
@@ -13,6 +13,7 @@ import {
   Alert, Box, Button, Chip, FormControl, InputLabel, MenuItem, Select, Stack, TextField, Typography,
 } from '@mui/material';
 import ArrowBackOutlined from '@mui/icons-material/ArrowBackOutlined';
+import TuneOutlined from '@mui/icons-material/TuneOutlined';
 import { useTranslation } from 'react-i18next';
 import { useSesion } from '../../../app/proveedores/ProveedorSesion.jsx';
 import { useListado } from '../../../compartido/hooks/useListado.js';
@@ -87,6 +88,12 @@ export default function PaginaKardex() {
           {t('inventario:kardex.existenciasActuales')}:{' '}
           <Box component="strong">{formatoCantidad(producto.existencias, idioma)} {t(`catalogo:unidades.${producto.unidadMedida}`)}</Box>
         </Typography>
+        {esAdmin && producto.estado === 'ACTIVO' && (
+          <Button component={EnlaceRuta} to={`/ajustes?nuevo=${producto.id}`} variant="outlined" startIcon={<TuneOutlined />}
+            sx={{ mt: 2 }}>
+            {t('inventario:acciones.ajustar')}
+          </Button>
+        )}
       </Box>
 
       <Box component="search" aria-label={t('inventario:kardex.filtros')}

@@ -1,0 +1,58 @@
+{
+  "titulo": "Inventory adjustments",
+  "subtitulo": "Stock corrections and opening inventory. Each adjustment is recorded in the stock card with its reason and the person responsible.",
+  "historial": "Adjustment history",
+  "vacio": "No adjustments match the filters.",
+  "campos": {
+    "fecha": "Date",
+    "consecutivo": "Number",
+    "producto": "Product",
+    "tipo": "Type",
+    "cantidad": "Quantity",
+    "costoUnitario": "Unit cost",
+    "motivo": "Reason",
+    "usuario": "Responsible"
+  },
+  "tipos": {
+    "ENTRADA": "Inbound",
+    "SALIDA": "Outbound"
+  },
+  "filtros": {
+    "etiqueta": "Adjustment filters",
+    "todos": "All",
+    "desde": "From",
+    "hasta": "To"
+  },
+  "acciones": {
+    "nuevo": "New adjustment",
+    "registrar": "Record adjustment"
+  },
+  "dialogo": {
+    "titulo": "New inventory adjustment"
+  },
+  "ayuda": {
+    "entera": "This product is not sold in fractions.",
+    "costoVigente": "Current average cost: {{costo}}"
+  },
+  "motivos": {
+    "etiqueta": "Common reasons",
+    "inicial": "Opening inventory",
+    "conteo": "Physical count difference",
+    "danado": "Unit damaged in storage",
+    "perdida": "Loss or shortage"
+  },
+  "efecto": {
+    "existencias": "Stock will change from {{actuales}} to {{resultantes}} {{unidad}}.",
+    "inmutable": "A recorded adjustment cannot be edited or deleted; to correct it, record another one in the opposite direction."
+  },
+  "validacion": {
+    "cantidadFormato": "Enter a quantity greater than zero, with at most 3 decimals.",
+    "cantidadEntera": "Use a whole quantity: this product is not sold in fractions.",
+    "existencias": "The outbound quantity exceeds the available stock ({{disponibles}}).",
+    "costoRequerido": "Enter the unit cost of the inbound adjustment.",
+    "costoFormato": "Up to 12 integer digits and 4 decimals, no negative values."
+  },
+  "avisos": {
+    "registrado": "Adjustment {{consecutivo}} recorded. Stock of {{codigo}}: {{existencias}}."
+  }
+}

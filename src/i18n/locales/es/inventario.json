@@ -19,7 +19,8 @@
   },
   "acciones": {
     "kardex": "Ver kardex",
-    "volver": "Volver al inventario"
+    "volver": "Volver al inventario",
+    "ajustar": "Registrar ajuste"
   },
   "valorizacion": {
     "titulo": "Valor del inventario",

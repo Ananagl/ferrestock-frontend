@@ -1,10 +1,10 @@
 /**
  * Nombre:                 apiSimulada.js
- * Descripción:            Backend simulado para las pruebas E2E: reproduce los contratos de autenticación, usuarios, catálogo, terceros e inventario (04_api_rest.md) sin depender del servidor real.
+ * Descripción:            Backend simulado para las pruebas E2E: reproduce los contratos de autenticación, usuarios, catálogo, terceros, inventario y ajustes (04_api_rest.md) sin depender del servidor real.
  * Fecha de creación:      2026-10-15
  * Fecha de actualización: 2026-10-15
  * Autores:                Ana Sofía Nagles García, María Mercedes Rincón Valencia, Juan David Camacho Tapiero
- * Versión:                0.6.0
+ * Versión:                0.7.0
  * @file
  */
 import { calcularDigitoNit } from '../../../compartido/utilidades/nit.js';
@@ -75,6 +75,12 @@ export async function instalarApiSimulada(page, opciones = {}) {
     { id: 12, codigo: 'FER-099', nombre: 'Serrucho antiguo', descripcion: null, categoria: categorias[0],
       unidadMedida: 'UNIDAD', permiteFraccion: false, precioVenta: '18000.00', existencias: '0.000', estado: 'INACTIVO', version: 0 },
   ];
+  // Historial de ajustes (incremento 6): el ajuste de salida que aparece en el kardex de FER-001
+  const ajustes = [
+    { id: 1, consecutivo: 'AJU-000001', fecha: '2026-10-14T18:00:00Z', productoId: 10, productoCodigo: 'FER-001',
+      productoNombre: 'Martillo de uña 16 oz', tipo: 'SALIDA', cantidad: '1.000', costoUnitario: '20000.0000',
+      motivo: 'Unidad dañada en bodega', usuario: 'admin' },
+  ];
   const tabla = Object.values(USUARIOS).map((u) => ({
     id: u.id, nombreUsuario: u.nombreUsuario, nombreCompleto: u.nombreCompleto, rol: u.rol, activo: true,
     bloqueado: Boolean(u.bloqueado), debeCambiarPassword: u.debeCambiarPassword,
@@ -129,6 +135,7 @@ export async function instalarApiSimulada(page, opciones = {}) {
     if (camino.startsWith('/inventario') || /^\/productos\/\d+\/movimientos$/.test(camino)) return responderInventario(ruta, camino);
     if (camino.startsWith('/productos')) return responderProductos(ruta, metodo, camino, cuerpo);
     if (camino.startsWith('/terceros')) return responderTerceros(ruta, metodo, camino, cuerpo);
+    if (camino.startsWith('/ajustes')) return responderAjustes(ruta, metodo, cuerpo);
     return ruta.fulfill(problema(404, 'NO_ENCONTRADO', 'No encontrado'));
   });
 
@@ -191,6 +198,11 @@ export async function instalarApiSimulada(page, opciones = {}) {
       return ruta.fulfill({ status: 201, json: nuevo });
     }
     if (!producto) return ruta.fulfill(problema(404, 'NO_ENCONTRADO', 'No encontrado'));
+    if (metodo === 'GET' && camino.endsWith('/costo')) {
+      if (actual?.rol !== 'ADMIN') return ruta.fulfill(problema(403, 'ACCESO_DENEGADO', 'Acceso denegado'));
+      return ruta.fulfill({ json: { productoId: id, costoPromedio: costos[id] ?? '0.0000', existencias: producto.existencias,
+        valor: (Number(producto.existencias) * Number(costos[id] ?? 0)).toFixed(2) } });
+    }
     if (metodo === 'GET') return ruta.fulfill({ json: producto });
     if (metodo === 'PUT') {
       if (cuerpo.version !== producto.version) {
@@ -250,6 +262,64 @@ export async function instalarApiSimulada(page, opciones = {}) {
       .filter((m) => !tipo || m.tipo === tipo)
       .map((m) => (admin ? m : { ...m, costoUnitario: undefined, costoPromedioResultante: undefined }));
     return ruta.fulfill({ json: { contenido, pagina: 0, tamano: 20, totalElementos: contenido.length, totalPaginas: 1 } });
+  }
+
+  /**
+   * Simula la API de ajustes (solo ADMIN) con las reglas del backend: motivo, costo en las entradas, fracciones y
+   * existencias suficientes; un ajuste válido mueve existencias, CPP y kardex.
+   */
+  function responderAjustes(ruta, metodo, cuerpo) {
+    if (actual?.rol !== 'ADMIN') return ruta.fulfill(problema(403, 'ACCESO_DENEGADO', 'Acceso denegado'));
+    const url = new URL(ruta.request().url());
+    if (metodo === 'GET') {
+      const productoId = url.searchParams.get('productoId');
+      const tipo = url.searchParams.get('tipo');
+      const contenido = [...ajustes].reverse()
+        .filter((a) => !productoId || String(a.productoId) === productoId)
+        .filter((a) => !tipo || a.tipo === tipo);
+      return ruta.fulfill({ json: { contenido, pagina: 0, tamano: 20, totalElementos: contenido.length, totalPaginas: 1 } });
+    }
+    const enCampo = (estado, codigo, campo, mensaje) => ruta.fulfill(problema(estado, codigo, mensaje,
+      { errores: [{ campo, mensaje }] }));
+    const producto = productos.find((p) => p.id === cuerpo.productoId);
+    if (!producto) return ruta.fulfill(problema(404, 'NO_ENCONTRADO', 'No encontrado'));
+    if ((cuerpo.motivo ?? '').trim().length < 5) {
+      return enCampo(400, 'VALIDACION', 'motivo', 'El motivo debe tener entre 5 y 300 caracteres.');
+    }
+    if (producto.estado !== 'ACTIVO') return enCampo(409, 'PRODUCTO_INACTIVO', 'productoId', 'El producto está inactivo.');
+    const cantidad = Number(cuerpo.cantidad);
+    if (!producto.permiteFraccion && !Number.isInteger(cantidad)) {
+      return enCampo(400, 'CANTIDAD_FRACCIONARIA_NO_PERMITIDA', 'cantidad', 'El producto no se vende en fracciones.');
+    }
+    const entrada = cuerpo.tipo === 'ENTRADA';
+    if (entrada && cuerpo.costoUnitario == null) {
+      return enCampo(400, 'COSTO_UNITARIO_REQUERIDO', 'costoUnitario', 'Indique el costo unitario de la entrada.');
+    }
+    const existencias = Number(producto.existencias);
+    if (!entrada && cantidad > existencias) {
+      return enCampo(409, 'EXISTENCIAS_INSUFICIENTES', 'cantidad',
+        `Existencias insuficientes para ${producto.codigo}: disponibles ${existencias}.`);
+    }
+    const cpp = Number(costos[producto.id] ?? 0);
+    const costo = entrada ? Number(cuerpo.costoUnitario) : cpp;
+    const saldo = existencias + (entrada ? cantidad : -cantidad);
+    const nuevoCpp = entrada && saldo > 0 ? (existencias * cpp + cantidad * costo) / saldo : cpp;
+    producto.existencias = saldo.toFixed(3);
+    costos[producto.id] = nuevoCpp.toFixed(4);
+    const ajuste = {
+      id: ajustes.length + 1, consecutivo: `AJU-${String(ajustes.length + 1).padStart(6, '0')}`, fecha: new Date().toISOString(),
+      productoId: producto.id, productoCodigo: producto.codigo, productoNombre: producto.nombre, tipo: cuerpo.tipo,
+      cantidad: cantidad.toFixed(3), costoUnitario: costo.toFixed(4), motivo: cuerpo.motivo.trim(), usuario: actual.nombreUsuario,
+    };
+    ajustes.push(ajuste);
+    (kardex[producto.id] ??= []).unshift({
+      id: 100 + ajuste.id, fecha: ajuste.fecha, tipo: entrada ? 'AJUSTE_ENTRADA' : 'AJUSTE_SALIDA',
+      naturaleza: entrada ? 'ENTRADA' : 'SALIDA', cantidad: ajuste.cantidad, saldoResultante: producto.existencias,
+      documentoTipo: 'AJUSTE', documentoId: ajuste.id, usuario: actual.nombreUsuario, costoUnitario: ajuste.costoUnitario,
+      costoPromedioResultante: costos[producto.id],
+    });
+    return ruta.fulfill({ status: 201, json: { ...ajuste, existenciasResultantes: producto.existencias,
+      costoPromedioResultante: costos[producto.id] } });
   }
 
   /** Simula la API de terceros con las reglas del backend (DV del NIT, duplicados, rol requerido). */

@@ -90,5 +90,9 @@
     "categoriaActualizada": "Category {{nombre}} updated.",
     "categoriaActivada": "Category {{nombre}} activated.",
     "categoriaDesactivada": "Category {{nombre}} deactivated."
+  },
+  "buscador": {
+    "ayuda": "Type code or name",
+    "sinResultados": "No products found."
   }
 }

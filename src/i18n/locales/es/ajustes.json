@@ -1,0 +1,58 @@
+{
+  "titulo": "Ajustes de inventario",
+  "subtitulo": "Correcciones de existencias e inventario inicial. Cada ajuste queda en el kardex con su motivo y responsable.",
+  "historial": "Historial de ajustes",
+  "vacio": "No hay ajustes que coincidan con los filtros.",
+  "campos": {
+    "fecha": "Fecha",
+    "consecutivo": "Consecutivo",
+    "producto": "Producto",
+    "tipo": "Tipo",
+    "cantidad": "Cantidad",
+    "costoUnitario": "Costo unitario",
+    "motivo": "Motivo",
+    "usuario": "Responsable"
+  },
+  "tipos": {
+    "ENTRADA": "Entrada",
+    "SALIDA": "Salida"
+  },
+  "filtros": {
+    "etiqueta": "Filtros de ajustes",
+    "todos": "Todos",
+    "desde": "Desde",
+    "hasta": "Hasta"
+  },
+  "acciones": {
+    "nuevo": "Nuevo ajuste",
+    "registrar": "Registrar ajuste"
+  },
+  "dialogo": {
+    "titulo": "Nuevo ajuste de inventario"
+  },
+  "ayuda": {
+    "entera": "Este producto no se vende en fracciones.",
+    "costoVigente": "Costo promedio actual: {{costo}}"
+  },
+  "motivos": {
+    "etiqueta": "Motivos frecuentes",
+    "inicial": "Inventario inicial",
+    "conteo": "Diferencia en conteo físico",
+    "danado": "Unidad dañada en bodega",
+    "perdida": "Pérdida o faltante"
+  },
+  "efecto": {
+    "existencias": "Las existencias pasarán de {{actuales}} a {{resultantes}} {{unidad}}.",
+    "inmutable": "Un ajuste registrado no se modifica ni se elimina; para corregirlo, registre otro en sentido contrario."
+  },
+  "validacion": {
+    "cantidadFormato": "Ingrese una cantidad mayor que cero, con máximo 3 decimales.",
+    "cantidadEntera": "Use una cantidad entera: este producto no se vende en fracciones.",
+    "existencias": "La salida supera las existencias disponibles ({{disponibles}}).",
+    "costoRequerido": "Indique el costo unitario de la entrada.",
+    "costoFormato": "Hasta 12 dígitos enteros y 4 decimales, sin valores negativos."
+  },
+  "avisos": {
+    "registrado": "Ajuste {{consecutivo}} registrado. Existencias de {{codigo}}: {{existencias}}."
+  }
+}
