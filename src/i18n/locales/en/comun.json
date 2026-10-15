@@ -14,7 +14,10 @@
     "alternarClaro": "Switch to light theme"
   },
   "estado": {
-    "cargando": "Loading…"
+    "cargando": "Loading…",
+    "error": "The information could not be loaded.",
+    "sinConexion": "Cannot reach the server.",
+    "codigo": "code"
   },
   "formulario": {
     "mostrarContrasena": "Show password",
@@ -56,5 +59,22 @@
     "titulo": "Access denied",
     "mensaje": "Your role is not allowed to view this screen.",
     "volver": "Back to home"
+  },
+  "acciones": {
+    "cancelar": "Cancel",
+    "guardar": "Save",
+    "editar": "Edit",
+    "reintentar": "Retry"
+  },
+  "tabla": {
+    "acciones": "Actions",
+    "filasPorPagina": "Rows per page",
+    "rango": "{{desde}}–{{hasta}} of {{total}}",
+    "ir": {
+      "first": "First page",
+      "last": "Last page",
+      "next": "Next page",
+      "previous": "Previous page"
+    }
   }
 }
