@@ -5,7 +5,7 @@
  * Fecha de creación:      2026-10-15
  * Fecha de actualización: 2026-10-15
  * Autores:                Ana Sofía Nagles García, María Mercedes Rincón Valencia, Juan David Camacho Tapiero
- * Versión:                0.6.0
+ * Versión:                0.7.0
  * @file
  */
 import i18n from 'i18next';
@@ -25,6 +25,8 @@ import tercerosEs from './locales/es/terceros.json';
 import tercerosEn from './locales/en/terceros.json';
 import inventarioEs from './locales/es/inventario.json';
 import inventarioEn from './locales/en/inventario.json';
+import ajustesEs from './locales/es/ajustes.json';
+import ajustesEn from './locales/en/ajustes.json';
 
 /** Idiomas soportados por la aplicación. */
 export const IDIOMAS = Object.freeze(['es', 'en']);
@@ -34,8 +36,8 @@ i18n
   .use(initReactI18next)
   .init({
     resources: {
-      es: { comun: comunEs, auth: authEs, validacion: validacionEs, usuarios: usuariosEs, catalogo: catalogoEs, terceros: tercerosEs, inventario: inventarioEs },
-      en: { comun: comunEn, auth: authEn, validacion: validacionEn, usuarios: usuariosEn, catalogo: catalogoEn, terceros: tercerosEn, inventario: inventarioEn },
+      es: { comun: comunEs, auth: authEs, validacion: validacionEs, usuarios: usuariosEs, catalogo: catalogoEs, terceros: tercerosEs, inventario: inventarioEs, ajustes: ajustesEs },
+      en: { comun: comunEn, auth: authEn, validacion: validacionEn, usuarios: usuariosEn, catalogo: catalogoEn, terceros: tercerosEn, inventario: inventarioEn, ajustes: ajustesEn },
     },
     supportedLngs: IDIOMAS,
     fallbackLng: 'es',

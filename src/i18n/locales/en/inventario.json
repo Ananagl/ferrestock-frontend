@@ -19,7 +19,8 @@
   },
   "acciones": {
     "kardex": "View stock ledger",
-    "volver": "Back to inventory"
+    "volver": "Back to inventory",
+    "ajustar": "Record adjustment"
   },
   "valorizacion": {
     "titulo": "Inventory value",

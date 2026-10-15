@@ -4,7 +4,7 @@
  * Fecha de creación:      2026-10-15
  * Fecha de actualización: 2026-10-15
  * Autores:                Ana Sofía Nagles García, María Mercedes Rincón Valencia, Juan David Camacho Tapiero
- * Versión:                0.6.0
+ * Versión:                0.7.0
  * @file
  */
 import { clienteHttp } from '../../../servicios/api/clienteHttp.js';
@@ -107,5 +107,14 @@ export async function cambiarEstadoProducto(id, estado) {
 /** @param {number} id - Producto. @param {string} precioVenta - Decimal. @returns {Promise<Producto>} Actualizado. */
 export async function cambiarPrecio(id, precioVenta) {
   const { data } = await clienteHttp.patch(`/productos/${id}/precio`, { precioVenta });
+  return data;
+}
+
+/**
+ * @param {number} id - Producto.
+ * @returns {Promise<{productoId: number, costoPromedio: string, existencias: string, valor: string}>} Costo promedio (solo ADMIN).
+ */
+export async function obtenerCosto(id) {
+  const { data } = await clienteHttp.get(`/productos/${id}/costo`);
   return data;
 }
