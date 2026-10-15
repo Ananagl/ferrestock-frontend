@@ -13,13 +13,48 @@
     "alternarOscuro": "Switch to dark theme",
     "alternarClaro": "Switch to light theme"
   },
-  "baseTecnica": {
-    "titulo": "Technical base ready",
-    "descripcion": "This neutral screen checks that the frontend starts and talks to the backend. Functional screens arrive in Phase 4.",
-    "estadoBackend": "Backend status",
-    "verificando": "Checking connection…",
-    "conectado": "Connected: the backend responds correctly.",
-    "sinConexion": "No connection to the backend.",
-    "reintentar": "Retry"
+  "estado": {
+    "cargando": "Loading…"
+  },
+  "formulario": {
+    "mostrarContrasena": "Show password",
+    "ocultarContrasena": "Hide password"
+  },
+  "menu": {
+    "etiqueta": "Main menu",
+    "abrir": "Open menu",
+    "inicio": "Home",
+    "ventas": "Sales",
+    "compras": "Purchases",
+    "productos": "Products",
+    "terceros": "Customers and suppliers",
+    "inventario": "Inventory",
+    "devoluciones": "Returns",
+    "comprobantes": "Receipts",
+    "ajustes": "Adjustments",
+    "auditoria": "Audit log",
+    "usuarios": "Users"
+  },
+  "usuario": {
+    "menu": "{{nombre}}'s menu",
+    "cambiarContrasena": "Change password",
+    "cerrarSesion": "Sign out"
+  },
+  "rol": {
+    "ADMIN": "Administrator",
+    "OPERATIVO": "Operator"
+  },
+  "inicio": {
+    "titulo": "Hello, {{nombre}}",
+    "rol": "You signed in as {{rol}}.",
+    "accesos": "Quick access"
+  },
+  "construccion": {
+    "mensaje": "This module is implemented in increment {{incremento}} of Phase 4."
+  },
+  "denegado": {
+    "titulo": "Access denied",
+    "mensaje": "Your role is not allowed to view this screen.",
+    "volver": "Back to home"
   }
 }

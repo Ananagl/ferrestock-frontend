@@ -13,13 +13,48 @@
     "alternarOscuro": "Cambiar a tema oscuro",
     "alternarClaro": "Cambiar a tema claro"
   },
-  "baseTecnica": {
-    "titulo": "Base técnica lista",
-    "descripcion": "Esta pantalla neutra comprueba que el frontend arranca y se comunica con el backend. Las pantallas funcionales llegan en la Fase 4.",
-    "estadoBackend": "Estado del backend",
-    "verificando": "Verificando conexión…",
-    "conectado": "Conectado: el backend responde correctamente.",
-    "sinConexion": "Sin conexión con el backend.",
-    "reintentar": "Reintentar"
+  "estado": {
+    "cargando": "Cargando…"
+  },
+  "formulario": {
+    "mostrarContrasena": "Mostrar contraseña",
+    "ocultarContrasena": "Ocultar contraseña"
+  },
+  "menu": {
+    "etiqueta": "Menú principal",
+    "abrir": "Abrir menú",
+    "inicio": "Inicio",
+    "ventas": "Ventas",
+    "compras": "Compras",
+    "productos": "Productos",
+    "terceros": "Clientes y proveedores",
+    "inventario": "Inventario",
+    "devoluciones": "Devoluciones",
+    "comprobantes": "Comprobantes",
+    "ajustes": "Ajustes",
+    "auditoria": "Auditoría",
+    "usuarios": "Usuarios"
+  },
+  "usuario": {
+    "menu": "Menú de {{nombre}}",
+    "cambiarContrasena": "Cambiar contraseña",
+    "cerrarSesion": "Cerrar sesión"
+  },
+  "rol": {
+    "ADMIN": "Administrador",
+    "OPERATIVO": "Usuario operativo"
+  },
+  "inicio": {
+    "titulo": "Hola, {{nombre}}",
+    "rol": "Ingresaste como {{rol}}.",
+    "accesos": "Accesos rápidos"
+  },
+  "construccion": {
+    "mensaje": "Este módulo se implementa en el incremento {{incremento}} de la Fase 4."
+  },
+  "denegado": {
+    "titulo": "Acceso denegado",
+    "mensaje": "Tu rol no tiene permiso para ver esta pantalla.",
+    "volver": "Volver al inicio"
   }
 }

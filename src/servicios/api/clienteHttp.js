@@ -1,25 +1,29 @@
 /**
  * Nombre:                 clienteHttp.js
- * Descripción:            Cliente HTTP central (Axios): base de la API, cookie de sesión, cabecera CSRF, idioma en
- *                         Accept-Language y aviso global cuando la sesión expira (401).
+ * Descripción:            Cliente HTTP central (Axios): base de la API, cookie de sesión, cabecera CSRF (la obtiene si falta), idioma en Accept-Language y aviso global cuando la sesión expira (401).
  * Fecha de creación:      2026-10-15
  * Fecha de actualización: 2026-10-15
  * Autores:                Ana Sofía Nagles García, María Mercedes Rincón Valencia, Juan David Camacho Tapiero
- * Versión:                0.1.0
+ * Versión:                0.2.0
  * @file
  */
 import axios from 'axios';
 import i18n from '../../i18n/configuracion.js';
 
-/** Evento del navegador que se emite cuando el backend responde 401 (lo escucha el módulo de autenticación). */
+/** Evento del navegador que se emite cuando el backend responde 401 (lo escucha ProveedorSesion). */
 export const EVENTO_SESION_EXPIRADA = 'fs:sesion-expirada';
+
+/** Ruta base de la API REST (mismo origen, ADR-04). */
+export const BASE_API = import.meta.env.VITE_API_BASE ?? '/api/v1';
+
+const METODOS_QUE_MODIFICAN = ['post', 'put', 'patch', 'delete'];
 
 /**
  * Instancia de Axios para todas las llamadas a la API REST.
- * La autenticación viaja en la cookie de sesión (no se guardan tokens en el navegador).
+ * La autenticación viaja en la cookie de sesión; no se guardan tokens en el navegador.
  */
 export const clienteHttp = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE ?? '/api/v1',
+  baseURL: BASE_API,
   withCredentials: true,
   xsrfCookieName: 'XSRF-TOKEN',
   xsrfHeaderName: 'X-XSRF-TOKEN',
@@ -27,8 +31,24 @@ export const clienteHttp = axios.create({
   headers: { Accept: 'application/json' },
 });
 
-clienteHttp.interceptors.request.use((config) => {
+/** @returns {boolean} true si el navegador ya tiene la cookie XSRF-TOKEN. */
+function hayTokenCsrf() {
+  return document.cookie.split(';').some((cookie) => cookie.trim().startsWith('XSRF-TOKEN='));
+}
+
+/**
+ * Pide al backend la cookie XSRF-TOKEN (necesaria antes de cualquier POST/PUT/PATCH/DELETE).
+ * @returns {Promise<void>}
+ */
+export async function prepararCsrf() {
+  await axios.get(`${BASE_API}/auth/csrf`, { withCredentials: true });
+}
+
+clienteHttp.interceptors.request.use(async (config) => {
   config.headers['Accept-Language'] = i18n.resolvedLanguage ?? 'es';
+  if (METODOS_QUE_MODIFICAN.includes(config.method) && !hayTokenCsrf()) {
+    await prepararCsrf();
+  }
   return config;
 });
 
@@ -41,12 +61,3 @@ clienteHttp.interceptors.response.use(
     return Promise.reject(error);
   },
 );
-
-/**
- * Consulta el endpoint público de salud del backend (fuera de /api/v1).
- * @returns {Promise<boolean>} true si el backend responde con estado UP.
- */
-export async function backendDisponible() {
-  const { data } = await axios.get('/actuator/health', { timeout: 5000 });
-  return data?.status === 'UP';
-}
