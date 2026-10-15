@@ -1,15 +1,20 @@
 # Nombre:                 nginx.conf.template
-# Descripción:            Sirve la SPA con rutas del lado del cliente y reenvía /api y /actuator al backend (ADR-04).
+# Descripción:            Sirve la SPA con rutas del lado del cliente y reenvía /api y /actuator al backend (ADR-04), también por HTTPS.
 # Fecha de creación:      2026-10-15
 # Fecha de actualización: 2026-10-15
 # Autores:                Ana Sofía Nagles García, María Mercedes Rincón Valencia, Juan David Camacho Tapiero
-# Versión:                0.12.0
+# Versión:                0.13.0
 server {
-    listen 80;
+    listen ${PORT};
     root /usr/share/nginx/html;
     add_header X-Content-Type-Options nosniff;
     add_header X-Frame-Options DENY;
-    location /api/ { proxy_pass ${BACKEND_URL}; proxy_set_header Host $host; proxy_set_header X-Forwarded-Proto $scheme; }
-    location /actuator/health { proxy_pass ${BACKEND_URL}; }
+    # El Host que llega al backend es el suyo (necesario en Render); la cookie de sesión queda en el dominio del frontend
+    location /api/ {
+        proxy_pass ${BACKEND_ESQUEMA}://${BACKEND_HOST};
+        proxy_ssl_server_name on;
+        proxy_set_header X-Forwarded-Proto https;
+    }
+    location /actuator/health { proxy_pass ${BACKEND_ESQUEMA}://${BACKEND_HOST}; proxy_ssl_server_name on; }
     location / { try_files $uri /index.html; }
 }

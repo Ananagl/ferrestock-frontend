@@ -3,7 +3,7 @@
 # Fecha de creación:      2026-10-15
 # Fecha de actualización: 2026-10-15
 # Autores:                Ana Sofía Nagles García, María Mercedes Rincón Valencia, Juan David Camacho Tapiero
-# Versión:                0.12.0
+# Versión:                0.13.0
 FROM node:22-alpine AS compilacion
 WORKDIR /app
 COPY package.json package-lock.json ./
@@ -14,5 +14,6 @@ RUN npm run build
 FROM nginx:1.27-alpine
 COPY --from=compilacion /app/dist /usr/share/nginx/html
 COPY nginx.conf.template /etc/nginx/templates/default.conf.template
-ENV BACKEND_URL=http://backend:8080
+# Render define PORT; en local se usa 80 y el backend del docker-compose
+ENV PORT=80 BACKEND_ESQUEMA=http BACKEND_HOST=backend:8080
 EXPOSE 80
