@@ -1,0 +1,7 @@
+{
+  "obligatorio": "This field is required.",
+  "longitudMaxima": "Maximum {{max}} characters.",
+  "contrasenaInsegura": "Must be 8 to 72 characters, with at least one letter and one number.",
+  "contrasenaRepetida": "The new password must be different from the current one.",
+  "contrasenaNoCoincide": "The confirmation does not match the new password."
+}

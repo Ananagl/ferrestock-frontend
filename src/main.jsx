@@ -5,7 +5,7 @@
  * Fecha de creación:      2026-10-15
  * Fecha de actualización: 2026-10-15
  * Autores:                Ana Sofía Nagles García, María Mercedes Rincón Valencia, Juan David Camacho Tapiero
- * Versión:                0.1.0
+ * Versión:                0.2.0
  * @file
  */
 import { StrictMode } from 'react';
@@ -15,12 +15,15 @@ import '@fontsource/inter/500.css';
 import '@fontsource/inter/700.css';
 import './i18n/configuracion.js';
 import { ProveedorTema } from './app/proveedores/ProveedorTema.jsx';
+import { ProveedorSesion } from './app/proveedores/ProveedorSesion.jsx';
 import App from './App.jsx';
 
 createRoot(document.getElementById('raiz')).render(
   <StrictMode>
     <ProveedorTema>
-      <App />
+      <ProveedorSesion>
+        <App />
+      </ProveedorSesion>
     </ProveedorTema>
   </StrictMode>,
 );
