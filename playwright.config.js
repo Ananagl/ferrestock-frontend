@@ -5,7 +5,7 @@
  * Fecha de creación:      2026-10-15
  * Fecha de actualización: 2026-10-15
  * Autores:                Ana Sofía Nagles García, María Mercedes Rincón Valencia, Juan David Camacho Tapiero
- * Versión:                0.1.0
+ * Versión:                0.3.0
  * @file
  */
 import { defineConfig, devices } from '@playwright/test';
@@ -18,6 +18,8 @@ export default defineConfig({
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 1 : 0,
   reporter: [['list'], ['html', { open: 'never' }]],
+  // La primera visita a cada pantalla compila el módulo en el servidor de desarrollo
+  expect: { timeout: 10000 },
   use: {
     baseURL: URL_BASE,
     locale: 'es-CO',
