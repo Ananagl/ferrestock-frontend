@@ -1,0 +1,45 @@
+{
+  "titulo": "Ventas",
+  "vacio": "No hay ventas que coincidan con los filtros.",
+  "filtros": "Filtros de ventas",
+  "campos": {
+    "cliente": "Cliente",
+    "precio": "Precio",
+    "disponibles": "Disponibles: {{cantidad}}",
+    "devuelta": "Devuelta",
+    "costo": "Costo"
+  },
+  "pago": {
+    "titulo": "Pago",
+    "recibido": "Efectivo recibido",
+    "cambio": "Cambio",
+    "soloEfectivo": "Solo se acepta efectivo.",
+    "medio": "Medio de pago",
+    "efectivo": "Efectivo"
+  },
+  "acciones": {
+    "nueva": "Nueva venta",
+    "confirmar": "Confirmar venta",
+    "volver": "Volver a ventas"
+  },
+  "nueva": {
+    "titulo": "Nueva venta"
+  },
+  "detalle": {
+    "titulo": "Venta {{consecutivo}}"
+  },
+  "anular": {
+    "titulo": "Anular la venta {{consecutivo}}",
+    "mensaje": "Las cantidades vendidas volverán al inventario al costo con que salieron. El consecutivo no se reutiliza.",
+    "conDevoluciones": "Esta venta tiene devoluciones: el sistema rechazará la anulación."
+  },
+  "validacion": {
+    "existencias": "Supera las existencias disponibles ({{disponibles}}).",
+    "valorFormato": "Hasta 12 dígitos enteros y 2 decimales.",
+    "pagoInsuficiente": "El efectivo recibido no cubre el total."
+  },
+  "avisos": {
+    "registrada": "Venta {{consecutivo}} confirmada. Cambio: {{cambio}}.",
+    "anulada": "Venta {{consecutivo}} anulada."
+  }
+}

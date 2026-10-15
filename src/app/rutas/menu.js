@@ -37,7 +37,7 @@ const ADMIN = Object.freeze(['ADMIN']);
 /** @type {readonly OpcionMenu[]} */
 export const MENU = Object.freeze([
   { ruta: '/', clave: 'menu.inicio', icono: HomeOutlined, roles: TODOS },
-  { ruta: '/ventas', clave: 'menu.ventas', icono: PointOfSaleOutlined, roles: TODOS, incremento: 8 },
+  { ruta: '/ventas', clave: 'menu.ventas', icono: PointOfSaleOutlined, roles: TODOS },
   { ruta: '/compras', clave: 'menu.compras', icono: ShoppingCartOutlined, roles: TODOS },
   { ruta: '/productos', clave: 'menu.productos', icono: Inventory2Outlined, roles: TODOS },
   { ruta: '/categorias', clave: 'menu.categorias', icono: CategoryOutlined, roles: ADMIN },

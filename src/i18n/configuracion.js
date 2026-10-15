@@ -31,6 +31,8 @@ import documentosEs from './locales/es/documentos.json';
 import documentosEn from './locales/en/documentos.json';
 import comprasEs from './locales/es/compras.json';
 import comprasEn from './locales/en/compras.json';
+import ventasEs from './locales/es/ventas.json';
+import ventasEn from './locales/en/ventas.json';
 
 /** Idiomas soportados por la aplicación. */
 export const IDIOMAS = Object.freeze(['es', 'en']);
@@ -41,9 +43,9 @@ i18n
   .init({
     resources: {
       es: { comun: comunEs, auth: authEs, validacion: validacionEs, usuarios: usuariosEs, catalogo: catalogoEs, terceros: tercerosEs, inventario: inventarioEs, ajustes: ajustesEs,
-        documentos: documentosEs, compras: comprasEs },
+        documentos: documentosEs, compras: comprasEs, ventas: ventasEs },
       en: { comun: comunEn, auth: authEn, validacion: validacionEn, usuarios: usuariosEn, catalogo: catalogoEn, terceros: tercerosEn, inventario: inventarioEn, ajustes: ajustesEn,
-        documentos: documentosEn, compras: comprasEn },
+        documentos: documentosEn, compras: comprasEn, ventas: ventasEn },
     },
     supportedLngs: IDIOMAS,
     fallbackLng: 'es',

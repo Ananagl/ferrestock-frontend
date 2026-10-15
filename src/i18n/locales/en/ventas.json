@@ -1,0 +1,45 @@
+{
+  "titulo": "Sales",
+  "vacio": "No sales match the filters.",
+  "filtros": "Sale filters",
+  "campos": {
+    "cliente": "Customer",
+    "precio": "Price",
+    "disponibles": "Available: {{cantidad}}",
+    "devuelta": "Returned",
+    "costo": "Cost"
+  },
+  "pago": {
+    "titulo": "Payment",
+    "recibido": "Cash received",
+    "cambio": "Change",
+    "soloEfectivo": "Only cash is accepted.",
+    "medio": "Payment method",
+    "efectivo": "Cash"
+  },
+  "acciones": {
+    "nueva": "New sale",
+    "confirmar": "Confirm sale",
+    "volver": "Back to sales"
+  },
+  "nueva": {
+    "titulo": "New sale"
+  },
+  "detalle": {
+    "titulo": "Sale {{consecutivo}}"
+  },
+  "anular": {
+    "titulo": "Void sale {{consecutivo}}",
+    "mensaje": "The sold quantities will return to stock at the cost they left with. The number is not reused.",
+    "conDevoluciones": "This sale has returns: the system will reject voiding it."
+  },
+  "validacion": {
+    "existencias": "Exceeds the available stock ({{disponibles}}).",
+    "valorFormato": "Up to 12 integer digits and 2 decimals.",
+    "pagoInsuficiente": "The cash received does not cover the total."
+  },
+  "avisos": {
+    "registrada": "Sale {{consecutivo}} confirmed. Change: {{cambio}}.",
+    "anulada": "Sale {{consecutivo}} voided."
+  }
+}
