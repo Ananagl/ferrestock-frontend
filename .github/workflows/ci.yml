@@ -1,0 +1,106 @@
+# Nombre:                 ci.yml
+# Descripción:            Pipeline del frontend: lint, claves i18n, build y E2E con Playwright (Chromium, Firefox y móvil);
+#                         en main despliega, corre Selenium en Edge contra el entorno de demostración y reporta en Taiga.
+# Fecha de creación:      2026-10-15
+# Fecha de actualización: 2026-10-15
+# Autores:                Ana Sofía Nagles García, María Mercedes Rincón Valencia, Juan David Camacho Tapiero
+# Versión:                0.12.0
+name: CI frontend
+
+on:
+  push:
+    branches: [develop, main]
+  pull_request:
+    branches: [develop, main]
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  calidad:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '22', cache: npm }
+      - run: npm ci
+      - name: Lint y claves i18n
+        run: npm test
+      - name: Build
+        run: npm run build
+      - uses: actions/upload-artifact@v4
+        with: { name: dist, path: dist }
+
+  e2e:
+    needs: calidad
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '22', cache: npm }
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium firefox
+      - name: Playwright (API simulada, 3 proyectos)
+        run: npx playwright test --workers=2
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: { name: reporte-playwright, path: playwright-report }
+
+  desplegar:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: e2e
+    runs-on: ubuntu-latest
+    permissions: { contents: read, packages: write }
+    environment: demostracion
+    steps:
+      - uses: actions/checkout@v4
+      - name: Construir y publicar la imagen, desplegar y verificar la salud
+        env:
+          GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          IMAGEN: ghcr.io/${{ github.repository }}:${{ github.sha }}
+          FS_DEPLOY_HOOK: ${{ secrets.FS_DEPLOY_HOOK }}
+          FS_URL_SALUD: ${{ vars.FS_URL_FRONTEND }}
+        run: ./scripts/despliegue/desplegar.sh
+
+  selenium:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && vars.FS_URL_FRONTEND != ''
+    needs: desplegar
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '22', cache: npm }
+      - run: npm ci
+      - name: Selenium en Edge contra el entorno de demostración
+        env:
+          NAVEGADOR: MicrosoftEdge
+          FS_URL: ${{ vars.FS_URL_FRONTEND }}
+          FS_USUARIO: ${{ secrets.FS_USUARIO_PRUEBAS }}
+          FS_CLAVE: ${{ secrets.FS_CLAVE_PRUEBAS }}
+        run: npm run test:selenium
+
+  reportar:
+    if: always() && github.event_name != 'pull_request'
+    needs: [calidad, e2e, desplegar, selenium]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Reportar en Taiga
+        env:
+          TAIGA_USUARIO: ${{ secrets.TAIGA_USUARIO }}
+          TAIGA_CLAVE: ${{ secrets.TAIGA_CLAVE }}
+          TAIGA_PROYECTO_ID: ${{ vars.TAIGA_PROYECTO_ID || '1811096' }}
+          TAIGA_ASIGNADO_POR_DEFECTO: ${{ vars.TAIGA_ASIGNADO_POR_DEFECTO || '905420' }}
+          TAIGA_SIMULAR: ${{ secrets.TAIGA_USUARIO == '' && '1' || '0' }}
+          REPO: ${{ github.event.repository.name }}
+          RAMA: ${{ github.ref_name }}
+          COMMIT: ${{ github.sha }}
+          AUTOR_GITHUB: ${{ github.actor }}
+          URL_LOG: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          RESULTADOS: ${{ toJSON(needs) }}
+        run: |
+          FALLIDO=$(jq -r 'to_entries | map(select(.value.result == "failure")) | .[0].key // empty' <<<"$RESULTADOS")
+          if [[ -n "$FALLIDO" ]]; then JOB="$FALLIDO" ./scripts/ci/taiga_reportar.sh fallo
+          else for J in calidad e2e desplegar selenium; do JOB="$J" ./scripts/ci/taiga_reportar.sh exito; done; fi

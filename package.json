@@ -16,7 +16,8 @@
     "verificar:i18n": "node scripts/verificar-i18n.mjs",
     "test": "npm run lint && npm run verificar:i18n",
     "test:e2e": "playwright test",
-    "docs": "jsdoc -c jsdoc.json"
+    "docs": "jsdoc -c jsdoc.json",
+    "test:selenium": "node --test src/pruebas/selenium/compatibilidad.test.mjs"
   },
   "dependencies": {
     "@emotion/react": "11.14.0",
