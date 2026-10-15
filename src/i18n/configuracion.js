@@ -5,7 +5,7 @@
  * Fecha de creación:      2026-10-15
  * Fecha de actualización: 2026-10-15
  * Autores:                Ana Sofía Nagles García, María Mercedes Rincón Valencia, Juan David Camacho Tapiero
- * Versión:                0.5.0
+ * Versión:                0.6.0
  * @file
  */
 import i18n from 'i18next';
@@ -23,6 +23,8 @@ import catalogoEs from './locales/es/catalogo.json';
 import catalogoEn from './locales/en/catalogo.json';
 import tercerosEs from './locales/es/terceros.json';
 import tercerosEn from './locales/en/terceros.json';
+import inventarioEs from './locales/es/inventario.json';
+import inventarioEn from './locales/en/inventario.json';
 
 /** Idiomas soportados por la aplicación. */
 export const IDIOMAS = Object.freeze(['es', 'en']);
@@ -32,8 +34,8 @@ i18n
   .use(initReactI18next)
   .init({
     resources: {
-      es: { comun: comunEs, auth: authEs, validacion: validacionEs, usuarios: usuariosEs, catalogo: catalogoEs, terceros: tercerosEs },
-      en: { comun: comunEn, auth: authEn, validacion: validacionEn, usuarios: usuariosEn, catalogo: catalogoEn, terceros: tercerosEn },
+      es: { comun: comunEs, auth: authEs, validacion: validacionEs, usuarios: usuariosEs, catalogo: catalogoEs, terceros: tercerosEs, inventario: inventarioEs },
+      en: { comun: comunEn, auth: authEn, validacion: validacionEn, usuarios: usuariosEn, catalogo: catalogoEn, terceros: tercerosEn, inventario: inventarioEn },
     },
     supportedLngs: IDIOMAS,
     fallbackLng: 'es',

@@ -4,7 +4,7 @@
  * Fecha de creación:      2026-10-15
  * Fecha de actualización: 2026-10-15
  * Autores:                Ana Sofía Nagles García, María Mercedes Rincón Valencia, Juan David Camacho Tapiero
- * Versión:                0.4.0
+ * Versión:                0.6.0
  * @file
  */
 import { clienteHttp } from '../../../servicios/api/clienteHttp.js';
@@ -77,6 +77,12 @@ export async function cambiarEstadoCategoria(id, activa) {
  */
 export async function listarProductos(parametros) {
   const { data } = await clienteHttp.get('/productos', { params: parametros });
+  return data;
+}
+
+/** @param {number} id - Producto. @returns {Promise<Producto>} Detalle del producto. */
+export async function obtenerProducto(id) {
+  const { data } = await clienteHttp.get(`/productos/${id}`);
   return data;
 }
 

@@ -4,7 +4,7 @@
  * Fecha de creación:      2026-10-15
  * Fecha de actualización: 2026-10-15
  * Autores:                Ana Sofía Nagles García, María Mercedes Rincón Valencia, Juan David Camacho Tapiero
- * Versión:                0.5.0
+ * Versión:                0.6.0
  * @file
  */
 import HomeOutlined from '@mui/icons-material/HomeOutlined';
@@ -42,7 +42,7 @@ export const MENU = Object.freeze([
   { ruta: '/productos', clave: 'menu.productos', icono: Inventory2Outlined, roles: TODOS },
   { ruta: '/categorias', clave: 'menu.categorias', icono: CategoryOutlined, roles: ADMIN },
   { ruta: '/terceros', clave: 'menu.terceros', icono: PeopleOutlined, roles: TODOS },
-  { ruta: '/inventario', clave: 'menu.inventario', icono: WarehouseOutlined, roles: TODOS, incremento: 5 },
+  { ruta: '/inventario', clave: 'menu.inventario', icono: WarehouseOutlined, roles: TODOS },
   { ruta: '/devoluciones', clave: 'menu.devoluciones', icono: AssignmentReturnOutlined, roles: TODOS, incremento: 9 },
   { ruta: '/comprobantes', clave: 'menu.comprobantes', icono: ReceiptLongOutlined, roles: TODOS, incremento: 10 },
   { ruta: '/ajustes', clave: 'menu.ajustes', icono: TuneOutlined, roles: ADMIN, incremento: 6 },

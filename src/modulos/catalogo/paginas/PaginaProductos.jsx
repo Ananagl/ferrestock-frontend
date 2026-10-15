@@ -4,7 +4,7 @@
  * Fecha de creación:      2026-10-15
  * Fecha de actualización: 2026-10-15
  * Autores:                Ana Sofía Nagles García, María Mercedes Rincón Valencia, Juan David Camacho Tapiero
- * Versión:                0.4.0
+ * Versión:                0.6.0
  * @file
  */
 import { useCallback, useEffect, useState } from 'react';
@@ -14,6 +14,8 @@ import {
 import AddOutlined from '@mui/icons-material/AddOutlined';
 import EditOutlined from '@mui/icons-material/EditOutlined';
 import SellOutlined from '@mui/icons-material/SellOutlined';
+import TimelineOutlined from '@mui/icons-material/TimelineOutlined';
+import { Link as EnlaceRuta } from 'react-router-dom';
 import ToggleOnOutlined from '@mui/icons-material/ToggleOnOutlined';
 import ToggleOffOutlined from '@mui/icons-material/ToggleOffOutlined';
 import { useTranslation } from 'react-i18next';
@@ -89,6 +91,11 @@ export default function PaginaProductos() {
         <Tooltip title={t('catalogo:acciones.precio')}>
           <IconButton aria-label={`${t('catalogo:acciones.precio')} ${p.codigo}`} onClick={() => setPrecio(p)}>
             <SellOutlined />
+          </IconButton>
+        </Tooltip>
+        <Tooltip title={t('inventario:acciones.kardex')}>
+          <IconButton component={EnlaceRuta} to={`/inventario/${p.id}`} aria-label={`${t('inventario:acciones.kardex')} ${p.codigo}`}>
+            <TimelineOutlined />
           </IconButton>
         </Tooltip>
         <Tooltip title={etiquetaEstado}>
