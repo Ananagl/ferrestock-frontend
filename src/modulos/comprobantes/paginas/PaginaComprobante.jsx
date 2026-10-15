@@ -95,7 +95,8 @@ export default function PaginaComprobante() {
               <Typography component="dd" sx={{ m: 0 }}>{c.motivo}</Typography></Box>
           )}
         </Box>
-        <Box sx={{ overflowX: 'auto' }}>
+        {/* Contenedor desplazable alcanzable con el teclado (WCAG 2.1.1): en móvil la tabla puede ser más ancha que la pantalla */}
+        <Box sx={{ overflowX: 'auto' }} tabIndex={0} role="region" aria-label={t('documentos:lineas.titulo')}>
           <Table size="small" aria-label={t('documentos:lineas.titulo')}>
             <TableHead>
               <TableRow>
