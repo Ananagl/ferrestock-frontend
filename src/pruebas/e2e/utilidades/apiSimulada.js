@@ -1,12 +1,13 @@
 /**
  * Nombre:                 apiSimulada.js
- * Descripción:            Backend simulado para las pruebas E2E: reproduce los contratos de autenticación, usuarios y catálogo (04_api_rest.md) sin depender del servidor real.
+ * Descripción:            Backend simulado para las pruebas E2E: reproduce los contratos de autenticación, usuarios, catálogo y terceros (04_api_rest.md) sin depender del servidor real.
  * Fecha de creación:      2026-10-15
  * Fecha de actualización: 2026-10-15
  * Autores:                Ana Sofía Nagles García, María Mercedes Rincón Valencia, Juan David Camacho Tapiero
- * Versión:                0.4.0
+ * Versión:                0.5.0
  * @file
  */
+import { calcularDigitoNit } from '../../../compartido/utilidades/nit.js';
 
 /** Contraseña válida de los usuarios simulados. */
 export const CLAVE_VALIDA = 'Clave2026segura';
@@ -44,6 +45,13 @@ export async function instalarApiSimulada(page, opciones = {}) {
     { id: 1, nombre: 'Herramientas manuales', activa: true },
     { id: 2, nombre: 'Eléctricos', activa: true },
     { id: 3, nombre: 'Descontinuada', activa: false },
+  ];
+  const terceros = [
+    { id: 20, tipoPersona: 'JURIDICA', tipoDocumento: 'NIT', numeroDocumento: '890903938', digitoVerificacion: '8',
+      nombre: 'Distribuidora Antioquia SAS', telefono: '604 444 5566', correo: 'ventas@distrib.co', direccion: null,
+      esCliente: false, esProveedor: true, activo: true },
+    { id: 21, tipoPersona: 'NATURAL', tipoDocumento: 'CC', numeroDocumento: '1020304050', digitoVerificacion: null,
+      nombre: 'Carlos Pérez', telefono: null, correo: null, direccion: null, esCliente: true, esProveedor: false, activo: true },
   ];
   const productos = [
     { id: 10, codigo: 'FER-001', nombre: 'Martillo de uña 16 oz', descripcion: null, categoria: categorias[0],
@@ -104,6 +112,7 @@ export async function instalarApiSimulada(page, opciones = {}) {
     if (camino.startsWith('/usuarios')) return responderUsuarios(ruta, metodo, camino, cuerpo);
     if (camino.startsWith('/categorias')) return responderCategorias(ruta, metodo, camino, cuerpo);
     if (camino.startsWith('/productos')) return responderProductos(ruta, metodo, camino, cuerpo);
+    if (camino.startsWith('/terceros')) return responderTerceros(ruta, metodo, camino, cuerpo);
     return ruta.fulfill(problema(404, 'NO_ENCONTRADO', 'No encontrado'));
   });
 
@@ -186,6 +195,50 @@ export async function instalarApiSimulada(page, opciones = {}) {
       return ruta.fulfill({ json: producto });
     }
     return ruta.fulfill(problema(404, 'NO_ENCONTRADO', 'No encontrado'));
+  }
+
+  /** Simula la API de terceros con las reglas del backend (DV del NIT, duplicados, rol requerido). */
+  function responderTerceros(ruta, metodo, camino, cuerpo) {
+    const url = new URL(ruta.request().url());
+    const id = Number(camino.split('/')[2]);
+    const tercero = terceros.find((x) => x.id === id);
+    if (metodo === 'GET' && camino === '/terceros') {
+      const q = (url.searchParams.get('q') ?? '').toLowerCase();
+      const rol = url.searchParams.get('rol');
+      const tipoPersona = url.searchParams.get('tipoPersona');
+      const activo = url.searchParams.get('activo');
+      const filtrados = terceros
+        .filter((x) => !q || x.nombre.toLowerCase().includes(q) || x.numeroDocumento.includes(q))
+        .filter((x) => !rol || (rol === 'CLIENTE' ? x.esCliente : x.esProveedor))
+        .filter((x) => !tipoPersona || x.tipoPersona === tipoPersona)
+        .filter((x) => !activo || String(x.activo) === activo)
+        .sort((a, b) => a.nombre.localeCompare(b.nombre));
+      return ruta.fulfill({ json: { contenido: filtrados, pagina: 0, tamano: 20, totalElementos: filtrados.length, totalPaginas: 1 } });
+    }
+    const errorCampo = (status, codigo, campo, mensaje) => ruta.fulfill(problema(status, codigo, mensaje,
+      { errores: [{ campo, mensaje }] }));
+    if (metodo === 'POST' || metodo === 'PUT') {
+      if (!cuerpo.esCliente && !cuerpo.esProveedor) return errorCampo(400, 'ROL_TERCERO_REQUERIDO', 'esCliente', 'Rol requerido');
+    }
+    if (metodo === 'POST') {
+      if (cuerpo.tipoDocumento === 'NIT' && calcularDigitoNit(cuerpo.numeroDocumento) !== Number(cuerpo.digitoVerificacion)) {
+        return errorCampo(400, 'DIGITO_VERIFICACION_INVALIDO', 'digitoVerificacion', 'El dígito de verificación no corresponde al NIT.');
+      }
+      if (terceros.some((x) => x.tipoDocumento === cuerpo.tipoDocumento && x.numeroDocumento === cuerpo.numeroDocumento)) {
+        return errorCampo(409, 'DUPLICADO', 'numeroDocumento', 'Ya existe un registro con ese valor.');
+      }
+      const nuevo = { ...cuerpo, id: siguienteId++, activo: true };
+      terceros.push(nuevo);
+      return ruta.fulfill({ status: 201, json: nuevo });
+    }
+    if (!tercero) return ruta.fulfill(problema(404, 'NO_ENCONTRADO', 'No encontrado'));
+    if (metodo === 'PUT') {
+      Object.assign(tercero, cuerpo);
+      return ruta.fulfill({ json: tercero });
+    }
+    if (actual?.rol !== 'ADMIN') return ruta.fulfill(problema(403, 'ACCESO_DENEGADO', 'Acceso denegado'));
+    tercero.activo = cuerpo.activo;
+    return ruta.fulfill({ json: tercero });
   }
 
   /** Simula la API de usuarios (solo ADMIN) sobre la tabla en memoria. */
