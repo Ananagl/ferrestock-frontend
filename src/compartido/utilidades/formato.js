@@ -4,7 +4,7 @@
  * Fecha de creación:      2026-10-15
  * Fecha de actualización: 2026-10-15
  * Autores:                Ana Sofía Nagles García, María Mercedes Rincón Valencia, Juan David Camacho Tapiero
- * Versión:                0.4.0
+ * Versión:                0.6.0
  * @file
  */
 
@@ -43,4 +43,17 @@ export function formatoCantidad(valor, idioma) {
  */
 export function normalizarDecimal(texto) {
   return String(texto ?? '').trim().replace(/\s/g, '').replace(',', '.');
+}
+
+/**
+ * Formatea fecha y hora en la zona horaria del negocio (America/Bogota).
+ * @param {string|null|undefined} instante - Fecha ISO-8601 (la API la envía en UTC).
+ * @param {string} idioma - Idioma activo.
+ * @returns {string} Fecha y hora legibles.
+ */
+export function formatoFechaHora(instante, idioma) {
+  if (!instante) return '';
+  return new Intl.DateTimeFormat(region(idioma), {
+    dateStyle: 'medium', timeStyle: 'short', timeZone: 'America/Bogota',
+  }).format(new Date(instante));
 }

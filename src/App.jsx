@@ -4,7 +4,7 @@
  * Fecha de creación:      2026-10-15
  * Fecha de actualización: 2026-10-15
  * Autores:                Ana Sofía Nagles García, María Mercedes Rincón Valencia, Juan David Camacho Tapiero
- * Versión:                0.5.0
+ * Versión:                0.6.0
  * @file
  */
 import { lazy, Suspense } from 'react';
@@ -23,6 +23,8 @@ const PaginaUsuarios = lazy(() => import('./modulos/usuarios/paginas/PaginaUsuar
 const PaginaProductos = lazy(() => import('./modulos/catalogo/paginas/PaginaProductos.jsx'));
 const PaginaCategorias = lazy(() => import('./modulos/catalogo/paginas/PaginaCategorias.jsx'));
 const PaginaTerceros = lazy(() => import('./modulos/terceros/paginas/PaginaTerceros.jsx'));
+const PaginaInventario = lazy(() => import('./modulos/inventario/paginas/PaginaInventario.jsx'));
+const PaginaKardex = lazy(() => import('./modulos/inventario/paginas/PaginaKardex.jsx'));
 
 /**
  * Rutas de la aplicación.
@@ -41,6 +43,8 @@ export default function App() {
               <Route path={RUTA_CAMBIO_CONTRASENA} element={<PaginaCambioContrasena />} />
               <Route path="/productos" element={<PaginaProductos />} />
               <Route path="/terceros" element={<PaginaTerceros />} />
+              <Route path="/inventario" element={<PaginaInventario />} />
+              <Route path="/inventario/:productoId" element={<PaginaKardex />} />
               <Route element={<RutaProtegida roles={['ADMIN']} />}>
                 <Route path="/usuarios" element={<PaginaUsuarios />} />
                 <Route path="/categorias" element={<PaginaCategorias />} />
