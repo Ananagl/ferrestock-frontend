@@ -1,0 +1,79 @@
+{
+  "titulo": "Clientes y proveedores",
+  "vacio": "No hay terceros que coincidan con los filtros.",
+  "campos": {
+    "documento": "Documento",
+    "nombre": "Nombre",
+    "tipoPersona": "Tipo de persona",
+    "tipoDocumento": "Tipo de documento",
+    "numeroDocumento": "Número de documento",
+    "dv": "DV",
+    "nombreCompleto": "Nombre completo",
+    "razonSocial": "Razón social",
+    "telefono": "Teléfono",
+    "correo": "Correo electrónico",
+    "direccion": "Dirección",
+    "roles": "Roles",
+    "rol": "Rol",
+    "contacto": "Contacto",
+    "estado": "Estado"
+  },
+  "personas": {
+    "NATURAL": "Persona natural",
+    "JURIDICA": "Persona jurídica"
+  },
+  "documentos": {
+    "CC": "Cédula de ciudadanía",
+    "CE": "Cédula de extranjería",
+    "NIT": "NIT"
+  },
+  "roles": {
+    "cliente": "Cliente",
+    "proveedor": "Proveedor",
+    "clientes": "Clientes",
+    "proveedores": "Proveedores"
+  },
+  "estado": {
+    "activo": "Activo",
+    "inactivo": "Inactivo"
+  },
+  "filtros": {
+    "etiqueta": "Filtros de clientes y proveedores",
+    "buscar": "Buscar por nombre o documento",
+    "todos": "Todos"
+  },
+  "acciones": {
+    "nuevo": "Nuevo tercero",
+    "activar": "Activar",
+    "desactivar": "Desactivar"
+  },
+  "ayuda": {
+    "numero": "Solo dígitos, sin puntos ni dígito de verificación.",
+    "juridica": "Una persona jurídica se identifica con NIT."
+  },
+  "validacion": {
+    "numero": "Entre 5 y 15 dígitos, sin puntos ni espacios.",
+    "dvFormato": "Un solo dígito.",
+    "dv": "El dígito de verificación no corresponde al NIT.",
+    "juridicaNit": "Una persona jurídica solo se identifica con NIT.",
+    "telefono": "Entre 7 y 20 caracteres: números, espacios, +, paréntesis o guion.",
+    "correo": "Correo electrónico no válido.",
+    "rol": "Marca si es cliente, proveedor o ambos."
+  },
+  "dialogo": {
+    "tituloNuevo": "Nuevo cliente o proveedor",
+    "tituloEditar": "Editar {{nombre}}"
+  },
+  "confirmar": {
+    "tituloDesactivar": "Desactivar tercero",
+    "tituloActivar": "Activar tercero",
+    "desactivar": "{{nombre}} no se podrá usar en nuevas compras ni ventas. Su historial se conserva.",
+    "activar": "{{nombre}} volverá a estar disponible para nuevas operaciones."
+  },
+  "avisos": {
+    "creado": "{{nombre}} registrado.",
+    "actualizado": "{{nombre}} actualizado.",
+    "activado": "{{nombre}} activado.",
+    "desactivado": "{{nombre}} desactivado."
+  }
+}
