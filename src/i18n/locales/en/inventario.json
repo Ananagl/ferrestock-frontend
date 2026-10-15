@@ -1,0 +1,68 @@
+{
+  "titulo": "Inventory",
+  "vacio": "No products match the filters.",
+  "campos": {
+    "codigo": "Code",
+    "nombre": "Name",
+    "categoria": "Category",
+    "unidad": "Unit",
+    "existencias": "Stock",
+    "costoPromedio": "Average cost",
+    "valor": "Value"
+  },
+  "filtros": {
+    "etiqueta": "Inventory filters",
+    "buscar": "Search by code or name",
+    "todas": "All",
+    "todos": "All",
+    "soloConExistencias": "In stock only"
+  },
+  "acciones": {
+    "kardex": "View stock ledger",
+    "volver": "Back to inventory",
+    "ajustar": "Record adjustment"
+  },
+  "valorizacion": {
+    "titulo": "Inventory value",
+    "productos": "Products",
+    "vacio": "There are no products in stock yet."
+  },
+  "verificacion": {
+    "boton": "Check consistency",
+    "ok": "Stock and costs match the ledger.",
+    "problemas": "{{cantidad}} product(s) do not match their ledger:"
+  },
+  "kardex": {
+    "titulo": "Stock ledger",
+    "tituloProducto": "Stock ledger of {{codigo}}",
+    "existenciasActuales": "Current stock",
+    "filtros": "Ledger filters",
+    "fecha": "Date",
+    "tipo": "Type",
+    "documento": "Document",
+    "entrada": "In",
+    "salida": "Out",
+    "saldo": "Balance",
+    "usuario": "User",
+    "costoUnitario": "Unit cost",
+    "desde": "From",
+    "hasta": "To",
+    "vacio": "This product has no movements yet.",
+    "noExiste": "The product does not exist."
+  },
+  "tipos": {
+    "COMPRA": "Purchase",
+    "VENTA": "Sale",
+    "DEVOLUCION": "Return",
+    "AJUSTE_ENTRADA": "Inbound adjustment",
+    "AJUSTE_SALIDA": "Outbound adjustment",
+    "ANULACION_COMPRA": "Purchase cancellation",
+    "ANULACION_VENTA": "Sale cancellation"
+  },
+  "documentos": {
+    "COMPRA": "Purchase",
+    "VENTA": "Sale",
+    "DEVOLUCION": "Return",
+    "AJUSTE": "Adjustment"
+  }
+}

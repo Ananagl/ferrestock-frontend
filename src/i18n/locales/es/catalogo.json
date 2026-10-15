@@ -1,0 +1,98 @@
+{
+  "productos": {
+    "titulo": "Productos",
+    "buscar": "Buscar por código o nombre",
+    "filtros": "Filtros de productos",
+    "vacio": "No hay productos que coincidan con los filtros.",
+    "dialogo": {
+      "tituloNuevo": "Nuevo producto",
+      "tituloEditar": "Editar producto {{codigo}}"
+    }
+  },
+  "categorias": {
+    "titulo": "Categorías",
+    "ayuda": "Las categorías inactivas se conservan en los productos que ya las tienen, pero no se pueden asignar a productos nuevos.",
+    "vacio": "No hay categorías.",
+    "tituloNueva": "Nueva categoría",
+    "tituloEditar": "Editar categoría"
+  },
+  "campos": {
+    "codigo": "Código",
+    "nombre": "Nombre",
+    "descripcion": "Descripción",
+    "categoria": "Categoría",
+    "unidad": "Unidad",
+    "permiteFraccion": "Se vende en fracciones",
+    "precioVenta": "Precio de venta",
+    "existencias": "Existencias",
+    "estado": "Estado"
+  },
+  "ayuda": {
+    "codigo": "Entre 2 y 30 caracteres: letras, números o guion. Se guarda en mayúsculas y no se puede cambiar.",
+    "permiteFraccion": "Márcalo si se puede vender por partes, por ejemplo cable por metros."
+  },
+  "unidades": {
+    "UNIDAD": "Unidad",
+    "METRO": "Metro",
+    "KILOGRAMO": "Kilogramo",
+    "LITRO": "Litro",
+    "GALON": "Galón",
+    "CAJA": "Caja",
+    "PAQUETE": "Paquete",
+    "ROLLO": "Rollo"
+  },
+  "estado": {
+    "ACTIVO": "Activo",
+    "INACTIVO": "Inactivo",
+    "activa": "Activa",
+    "inactiva": "inactiva"
+  },
+  "filtros": {
+    "todas": "Todas",
+    "todos": "Todos"
+  },
+  "acciones": {
+    "nuevoProducto": "Nuevo producto",
+    "nuevaCategoria": "Nueva categoría",
+    "precio": "Cambiar precio",
+    "activar": "Activar",
+    "desactivar": "Desactivar",
+    "recargar": "Recargar"
+  },
+  "precio": {
+    "titulo": "Cambiar precio de {{codigo}}",
+    "actual": "Precio actual: {{precio}}.",
+    "nota": "Solo aplica a las ventas que se registren desde ahora.",
+    "nuevo": "Nuevo precio"
+  },
+  "validacion": {
+    "codigo": "Entre 2 y 30 caracteres: letras, números o guion, sin espacios.",
+    "precioFormato": "Escribe un valor válido, con hasta 2 decimales.",
+    "precioPositivo": "El precio debe ser mayor que cero."
+  },
+  "errores": {
+    "version": "Otra persona modificó este producto mientras lo editabas. Recarga para ver los datos actuales.",
+    "categoriaDuplicada": "Ya existe una categoría con ese nombre."
+  },
+  "confirmar": {
+    "tituloDesactivar": "Desactivar producto",
+    "tituloActivar": "Activar producto",
+    "desactivar": "{{codigo}} no se podrá usar en nuevas compras ni ventas. Su historial se conserva.",
+    "activar": "{{codigo}} volverá a estar disponible para nuevas operaciones."
+  },
+  "avisos": {
+    "creado": "Producto {{codigo}} creado.",
+    "actualizado": "Producto {{codigo}} actualizado.",
+    "activado": "Producto {{codigo}} activado.",
+    "desactivado": "Producto {{codigo}} desactivado.",
+    "precio": "Nuevo precio de {{codigo}}: {{precio}}.",
+    "categoriaCreada": "Categoría {{nombre}} creada.",
+    "categoriaActualizada": "Categoría {{nombre}} actualizada.",
+    "categoriaActivada": "Categoría {{nombre}} activada.",
+    "categoriaDesactivada": "Categoría {{nombre}} desactivada."
+  },
+  "buscador": {
+    "ayuda": "Escriba código o nombre",
+    "sinResultados": "No se encontraron productos."
+  }
+}

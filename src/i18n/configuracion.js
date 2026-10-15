@@ -5,7 +5,7 @@
  * Fecha de creación:      2026-10-15
  * Fecha de actualización: 2026-10-15
  * Autores:                Ana Sofía Nagles García, María Mercedes Rincón Valencia, Juan David Camacho Tapiero
- * Versión:                0.1.0
+ * Versión:                0.10.0
  * @file
  */
 import i18n from 'i18next';
@@ -13,6 +13,32 @@ import { initReactI18next } from 'react-i18next';
 import DetectorIdioma from 'i18next-browser-languagedetector';
 import comunEs from './locales/es/comun.json';
 import comunEn from './locales/en/comun.json';
+import authEs from './locales/es/auth.json';
+import authEn from './locales/en/auth.json';
+import validacionEs from './locales/es/validacion.json';
+import validacionEn from './locales/en/validacion.json';
+import usuariosEs from './locales/es/usuarios.json';
+import usuariosEn from './locales/en/usuarios.json';
+import catalogoEs from './locales/es/catalogo.json';
+import catalogoEn from './locales/en/catalogo.json';
+import tercerosEs from './locales/es/terceros.json';
+import tercerosEn from './locales/en/terceros.json';
+import inventarioEs from './locales/es/inventario.json';
+import inventarioEn from './locales/en/inventario.json';
+import ajustesEs from './locales/es/ajustes.json';
+import ajustesEn from './locales/en/ajustes.json';
+import documentosEs from './locales/es/documentos.json';
+import documentosEn from './locales/en/documentos.json';
+import comprasEs from './locales/es/compras.json';
+import comprasEn from './locales/en/compras.json';
+import ventasEs from './locales/es/ventas.json';
+import ventasEn from './locales/en/ventas.json';
+import devolucionesEs from './locales/es/devoluciones.json';
+import devolucionesEn from './locales/en/devoluciones.json';
+import comprobantesEs from './locales/es/comprobantes.json';
+import comprobantesEn from './locales/en/comprobantes.json';
+import auditoriaEs from './locales/es/auditoria.json';
+import auditoriaEn from './locales/en/auditoria.json';
 
 /** Idiomas soportados por la aplicación. */
 export const IDIOMAS = Object.freeze(['es', 'en']);
@@ -22,8 +48,12 @@ i18n
   .use(initReactI18next)
   .init({
     resources: {
-      es: { comun: comunEs },
-      en: { comun: comunEn },
+      es: { comun: comunEs, auth: authEs, validacion: validacionEs, usuarios: usuariosEs, catalogo: catalogoEs, terceros: tercerosEs, inventario: inventarioEs, ajustes: ajustesEs,
+        documentos: documentosEs, compras: comprasEs, ventas: ventasEs, devoluciones: devolucionesEs,
+        comprobantes: comprobantesEs, auditoria: auditoriaEs },
+      en: { comun: comunEn, auth: authEn, validacion: validacionEn, usuarios: usuariosEn, catalogo: catalogoEn, terceros: tercerosEn, inventario: inventarioEn, ajustes: ajustesEn,
+        documentos: documentosEn, compras: comprasEn, ventas: ventasEn, devoluciones: devolucionesEn,
+        comprobantes: comprobantesEn, auditoria: auditoriaEn },
     },
     supportedLngs: IDIOMAS,
     fallbackLng: 'es',

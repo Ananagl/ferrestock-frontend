@@ -1,0 +1,68 @@
+{
+  "titulo": "Inventario",
+  "vacio": "No hay productos que coincidan con los filtros.",
+  "campos": {
+    "codigo": "Código",
+    "nombre": "Nombre",
+    "categoria": "Categoría",
+    "unidad": "Unidad",
+    "existencias": "Existencias",
+    "costoPromedio": "Costo promedio",
+    "valor": "Valor"
+  },
+  "filtros": {
+    "etiqueta": "Filtros de inventario",
+    "buscar": "Buscar por código o nombre",
+    "todas": "Todas",
+    "todos": "Todos",
+    "soloConExistencias": "Solo con existencias"
+  },
+  "acciones": {
+    "kardex": "Ver kardex",
+    "volver": "Volver al inventario",
+    "ajustar": "Registrar ajuste"
+  },
+  "valorizacion": {
+    "titulo": "Valor del inventario",
+    "productos": "Productos",
+    "vacio": "Aún no hay productos con existencias."
+  },
+  "verificacion": {
+    "boton": "Verificar consistencia",
+    "ok": "Existencias y costos coinciden con el kardex.",
+    "problemas": "{{cantidad}} producto(s) no coinciden con su kardex:"
+  },
+  "kardex": {
+    "titulo": "Kardex",
+    "tituloProducto": "Kardex de {{codigo}}",
+    "existenciasActuales": "Existencias actuales",
+    "filtros": "Filtros del kardex",
+    "fecha": "Fecha",
+    "tipo": "Tipo",
+    "documento": "Documento",
+    "entrada": "Entrada",
+    "salida": "Salida",
+    "saldo": "Saldo",
+    "usuario": "Usuario",
+    "costoUnitario": "Costo unitario",
+    "desde": "Desde",
+    "hasta": "Hasta",
+    "vacio": "Este producto aún no tiene movimientos.",
+    "noExiste": "El producto no existe."
+  },
+  "tipos": {
+    "COMPRA": "Compra",
+    "VENTA": "Venta",
+    "DEVOLUCION": "Devolución",
+    "AJUSTE_ENTRADA": "Ajuste de entrada",
+    "AJUSTE_SALIDA": "Ajuste de salida",
+    "ANULACION_COMPRA": "Anulación de compra",
+    "ANULACION_VENTA": "Anulación de venta"
+  },
+  "documentos": {
+    "COMPRA": "Compra",
+    "VENTA": "Venta",
+    "DEVOLUCION": "Devolución",
+    "AJUSTE": "Ajuste"
+  }
+}

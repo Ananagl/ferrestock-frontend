@@ -1,0 +1,98 @@
+{
+  "productos": {
+    "titulo": "Products",
+    "buscar": "Search by code or name",
+    "filtros": "Product filters",
+    "vacio": "No products match the filters.",
+    "dialogo": {
+      "tituloNuevo": "New product",
+      "tituloEditar": "Edit product {{codigo}}"
+    }
+  },
+  "categorias": {
+    "titulo": "Categories",
+    "ayuda": "Inactive categories remain on the products that already use them, but cannot be assigned to new products.",
+    "vacio": "There are no categories.",
+    "tituloNueva": "New category",
+    "tituloEditar": "Edit category"
+  },
+  "campos": {
+    "codigo": "Code",
+    "nombre": "Name",
+    "descripcion": "Description",
+    "categoria": "Category",
+    "unidad": "Unit",
+    "permiteFraccion": "Sold in fractions",
+    "precioVenta": "Sale price",
+    "existencias": "Stock",
+    "estado": "Status"
+  },
+  "ayuda": {
+    "codigo": "2 to 30 characters: letters, numbers or hyphen. Stored in uppercase and cannot be changed.",
+    "permiteFraccion": "Check it if it can be sold in parts, for example cable by the meter."
+  },
+  "unidades": {
+    "UNIDAD": "Unit",
+    "METRO": "Meter",
+    "KILOGRAMO": "Kilogram",
+    "LITRO": "Liter",
+    "GALON": "Gallon",
+    "CAJA": "Box",
+    "PAQUETE": "Pack",
+    "ROLLO": "Roll"
+  },
+  "estado": {
+    "ACTIVO": "Active",
+    "INACTIVO": "Inactive",
+    "activa": "Active",
+    "inactiva": "inactive"
+  },
+  "filtros": {
+    "todas": "All",
+    "todos": "All"
+  },
+  "acciones": {
+    "nuevoProducto": "New product",
+    "nuevaCategoria": "New category",
+    "precio": "Change price",
+    "activar": "Activate",
+    "desactivar": "Deactivate",
+    "recargar": "Reload"
+  },
+  "precio": {
+    "titulo": "Change price of {{codigo}}",
+    "actual": "Current price: {{precio}}.",
+    "nota": "It only applies to sales recorded from now on.",
+    "nuevo": "New price"
+  },
+  "validacion": {
+    "codigo": "2 to 30 characters: letters, numbers or hyphen, no spaces.",
+    "precioFormato": "Enter a valid value with up to 2 decimals.",
+    "precioPositivo": "The price must be greater than zero."
+  },
+  "errores": {
+    "version": "Someone else modified this product while you were editing it. Reload to see the current data.",
+    "categoriaDuplicada": "A category with that name already exists."
+  },
+  "confirmar": {
+    "tituloDesactivar": "Deactivate product",
+    "tituloActivar": "Activate product",
+    "desactivar": "{{codigo}} cannot be used in new purchases or sales. Its history is kept.",
+    "activar": "{{codigo}} will be available again for new operations."
+  },
+  "avisos": {
+    "creado": "Product {{codigo}} created.",
+    "actualizado": "Product {{codigo}} updated.",
+    "activado": "Product {{codigo}} activated.",
+    "desactivado": "Product {{codigo}} deactivated.",
+    "precio": "New price of {{codigo}}: {{precio}}.",
+    "categoriaCreada": "Category {{nombre}} created.",
+    "categoriaActualizada": "Category {{nombre}} updated.",
+    "categoriaActivada": "Category {{nombre}} activated.",
+    "categoriaDesactivada": "Category {{nombre}} deactivated."
+  },
+  "buscador": {
+    "ayuda": "Type code or name",
+    "sinResultados": "No products found."
+  }
+}

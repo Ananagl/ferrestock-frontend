@@ -1,0 +1,13 @@
+{
+  "titulo": "Audit log",
+  "subtitulo": "Events recorded by the system. They cannot be edited or deleted.",
+  "vacio": "No events match the filters.",
+  "filtros": "Audit filters",
+  "buscar": "Search in the description",
+  "campos": {
+    "fecha": "Date and time",
+    "usuario": "User",
+    "accion": "Action",
+    "descripcion": "Description"
+  }
+}

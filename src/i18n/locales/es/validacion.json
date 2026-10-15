@@ -1,0 +1,8 @@
+{
+  "obligatorio": "Este campo es obligatorio.",
+  "longitudMaxima": "Máximo {{max}} caracteres.",
+  "contrasenaInsegura": "Debe tener entre 8 y 72 caracteres, con al menos una letra y un número.",
+  "contrasenaRepetida": "La nueva contraseña debe ser distinta de la actual.",
+  "contrasenaNoCoincide": "La confirmación no coincide con la nueva contraseña.",
+  "longitud": "Debe tener entre {{min}} y {{max}} caracteres."
+}

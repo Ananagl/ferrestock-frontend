@@ -1,0 +1,44 @@
+{
+  "campos": {
+    "consecutivo": "Number",
+    "fecha": "Date",
+    "estado": "Status",
+    "total": "Total",
+    "subtotal": "Subtotal",
+    "producto": "Product",
+    "cantidad": "Quantity",
+    "usuario": "Recorded by"
+  },
+  "estados": {
+    "REGISTRADA": "Recorded",
+    "ANULADA": "Voided"
+  },
+  "filtros": {
+    "todos": "All",
+    "desde": "From",
+    "hasta": "To"
+  },
+  "acciones": {
+    "ver": "View details",
+    "anular": "Void"
+  },
+  "lineas": {
+    "titulo": "Lines",
+    "agregar": "Add line",
+    "quitar": "Remove line",
+    "quitarNumero": "Remove line {{numero}}",
+    "linea": "Line {{numero}}"
+  },
+  "anulacion": {
+    "motivo": "Reason for voiding",
+    "confirmar": "Void document",
+    "resumen": "Voided by {{usuario}} on {{fecha}}. Reason: {{motivo}}"
+  },
+  "validacion": {
+    "cantidadFormato": "Enter a quantity greater than zero, with at most 3 decimals.",
+    "cantidadEntera": "Use a whole quantity: this product is not sold in fractions.",
+    "repetido": "The product is already in another line.",
+    "sinLineas": "Add at least one line."
+  },
+  "noExiste": "The document does not exist."
+}
