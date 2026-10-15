@@ -92,6 +92,13 @@ export async function instalarApiSimulada(page, opciones = {}) {
       usuario: 'operador', lineas: [{ id: 2, productoId: 10, productoCodigo: 'FER-001', productoNombre: 'Martillo de uña 16 oz',
         cantidad: '2.000', costoUnitario: '21000.0000', subtotal: '42000.00' }] },
   ];
+  // Ventas (incremento 8): la venta de 3 unidades del kardex de FER-001
+  const ventas = [
+    { id: 1, consecutivo: 'VEN-000001', fecha: '2026-10-14T15:00:00Z', clienteId: 21, clienteNombre: 'Carlos Pérez', total: '105000.00',
+      medioPago: 'EFECTIVO', valorRecibido: '110000.00', cambio: '5000.00', estado: 'REGISTRADA', motivoAnulacion: null, anuladaPor: null,
+      anuladaEn: null, usuario: 'operador', lineas: [{ id: 1, productoId: 10, productoCodigo: 'FER-001', productoNombre: 'Martillo de uña 16 oz',
+        cantidad: '3.000', precioUnitario: '35000.00', subtotal: '105000.00', cantidadDevuelta: '0.000', costoUnitario: '20000.0000' }] },
+  ];
   const tabla = Object.values(USUARIOS).map((u) => ({
     id: u.id, nombreUsuario: u.nombreUsuario, nombreCompleto: u.nombreCompleto, rol: u.rol, activo: true,
     bloqueado: Boolean(u.bloqueado), debeCambiarPassword: u.debeCambiarPassword,
@@ -148,6 +155,7 @@ export async function instalarApiSimulada(page, opciones = {}) {
     if (camino.startsWith('/terceros')) return responderTerceros(ruta, metodo, camino, cuerpo);
     if (camino.startsWith('/ajustes')) return responderAjustes(ruta, metodo, cuerpo);
     if (camino.startsWith('/compras')) return responderCompras(ruta, metodo, camino, cuerpo);
+    if (camino.startsWith('/ventas')) return responderVentas(ruta, metodo, camino, cuerpo);
     return ruta.fulfill(problema(404, 'NO_ENCONTRADO', 'No encontrado'));
   });
 
@@ -410,6 +418,79 @@ export async function instalarApiSimulada(page, opciones = {}) {
     return ruta.fulfill({ json: compra });
   }
 
+  /** Venta tal como la ve el usuario actual: el costo de las líneas solo para el ADMIN (DP-15). */
+  function vistaVenta(venta) {
+    if (actual?.rol === 'ADMIN') return venta;
+    return { ...venta, lineas: venta.lineas.map((l) => ({ ...l, costoUnitario: undefined })) };
+  }
+
+  /** Simula la API de ventas: venta y pago en una operación, existencias suficientes y anulación solo ADMIN. */
+  function responderVentas(ruta, metodo, camino, cuerpo) {
+    const url = new URL(ruta.request().url());
+    const id = Number(camino.split('/')[2]);
+    const enCampo = (estado, codigo, campo, mensaje) => ruta.fulfill(problema(estado, codigo, mensaje, { errores: [{ campo, mensaje }] }));
+    if (metodo === 'GET' && camino === '/ventas') {
+      const clienteId = url.searchParams.get('clienteId');
+      const estado = url.searchParams.get('estado');
+      return pagina(ruta, [...ventas].reverse()
+        .filter((v) => !clienteId || String(v.clienteId) === clienteId)
+        .filter((v) => !estado || v.estado === estado)
+        .map((v) => ({ ...v, lineas: undefined })));
+    }
+    if (metodo === 'POST' && camino === '/ventas') {
+      const cliente = terceros.find((x) => x.id === cuerpo.clienteId);
+      if (!cliente?.esCliente || !cliente.activo) return enCampo(409, 'TERCERO_INACTIVO', 'clienteId', 'El cliente no está disponible.');
+      if (cuerpo.pago.medio !== 'EFECTIVO') return enCampo(400, 'MEDIO_PAGO_NO_PERMITIDO', 'pago.medio', 'Solo se acepta pago en efectivo.');
+      let total = 0;
+      for (let i = 0; i < cuerpo.lineas.length; i += 1) {
+        const l = cuerpo.lineas[i];
+        const producto = productos.find((p) => p.id === l.productoId);
+        if (Number(l.cantidad) > Number(producto.existencias)) {
+          return enCampo(409, 'EXISTENCIAS_INSUFICIENTES', `lineas[${i}].cantidad`,
+            `Existencias insuficientes para ${producto.codigo}: disponibles ${Number(producto.existencias)}.`);
+        }
+        total += Math.round(Number(l.cantidad) * Number(producto.precioVenta) * 100) / 100;
+      }
+      if (Number(cuerpo.pago.valorRecibido) < total) {
+        return enCampo(400, 'PAGO_INSUFICIENTE', 'pago.valorRecibido', `El valor recibido es menor que el total de la venta (${total}).`);
+      }
+      const nueva = { id: ventas.length + 1, consecutivo: `VEN-${String(ventas.length + 1).padStart(6, '0')}`, fecha: new Date().toISOString(),
+        clienteId: cliente.id, clienteNombre: cliente.nombre, total: total.toFixed(2), medioPago: 'EFECTIVO',
+        valorRecibido: Number(cuerpo.pago.valorRecibido).toFixed(2), cambio: (Number(cuerpo.pago.valorRecibido) - total).toFixed(2),
+        estado: 'REGISTRADA', motivoAnulacion: null, anuladaPor: null, anuladaEn: null, usuario: actual.nombreUsuario, lineas: [] };
+      cuerpo.lineas.forEach((l, i) => {
+        const producto = productos.find((p) => p.id === l.productoId);
+        const cantidad = Number(l.cantidad);
+        const costo = Number(costos[producto.id] ?? 0);
+        nueva.lineas.push({ id: 200 + ventas.length * 10 + i, productoId: producto.id, productoCodigo: producto.codigo,
+          productoNombre: producto.nombre, cantidad: cantidad.toFixed(3), precioUnitario: producto.precioVenta,
+          subtotal: (Math.round(cantidad * Number(producto.precioVenta) * 100) / 100).toFixed(2), cantidadDevuelta: '0.000',
+          costoUnitario: costo.toFixed(4) });
+        mover(producto, 'VENTA', 'SALIDA', cantidad, costo, 'VENTA', nueva.id);
+      });
+      ventas.push(nueva);
+      return ruta.fulfill({ status: 201, json: vistaVenta(nueva) });
+    }
+    const venta = ventas.find((v) => v.id === id);
+    if (!venta) return ruta.fulfill(problema(404, 'NO_ENCONTRADO', 'No encontrado'));
+    if (metodo === 'GET' && camino.endsWith('/devolvible')) {
+      return ruta.fulfill({ json: venta.lineas.map((l) => ({ ventaLineaId: l.id, productoId: l.productoId, productoCodigo: l.productoCodigo,
+        productoNombre: l.productoNombre, vendida: l.cantidad, devuelta: l.cantidadDevuelta,
+        disponible: (Number(l.cantidad) - Number(l.cantidadDevuelta)).toFixed(3), permiteFraccion: productos.find((p) => p.id === l.productoId).permiteFraccion })) });
+    }
+    if (metodo === 'GET') return ruta.fulfill({ json: vistaVenta(venta) });
+    if (actual?.rol !== 'ADMIN') return ruta.fulfill(problema(403, 'ACCESO_DENEGADO', 'Acceso denegado'));
+    if (venta.lineas.some((l) => Number(l.cantidadDevuelta) > 0)) {
+      return ruta.fulfill(problema(409, 'VENTA_CON_DEVOLUCIONES', 'La venta tiene devoluciones y no se puede anular.'));
+    }
+    venta.lineas.forEach((l) => {
+      mover(productos.find((p) => p.id === l.productoId), 'ANULACION_VENTA', 'ENTRADA', Number(l.cantidad), Number(l.costoUnitario),
+        'VENTA', venta.id, { pondera: true });
+    });
+    Object.assign(venta, { estado: 'ANULADA', motivoAnulacion: cuerpo.motivo, anuladaPor: actual.nombreUsuario, anuladaEn: new Date().toISOString() });
+    return ruta.fulfill({ json: vistaVenta(venta) });
+  }
+
   /** Simula la API de terceros con las reglas del backend (DV del NIT, duplicados, rol requerido). */
   function responderTerceros(ruta, metodo, camino, cuerpo) {
     const url = new URL(ruta.request().url());
@@ -509,6 +590,10 @@ export async function instalarApiSimulada(page, opciones = {}) {
   return {
     llamadas,
     /** Simula que otra persona editó el producto (sube su versión en el "servidor"). */
+    /** Marca una devolución sobre la primera línea de una venta (para probar CA-VEN-06). */
+    marcarDevolucion(ventaId) {
+      ventas.find((v) => v.id === ventaId).lineas[0].cantidadDevuelta = '1.000';
+    },
     modificarProductoPorOtro(id) {
       productos.find((p) => p.id === id).version += 1;
     },

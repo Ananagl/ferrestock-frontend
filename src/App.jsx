@@ -29,6 +29,9 @@ const PaginaAjustes = lazy(() => import('./modulos/ajustes/paginas/PaginaAjustes
 const PaginaCompras = lazy(() => import('./modulos/compras/paginas/PaginaCompras.jsx'));
 const PaginaNuevaCompra = lazy(() => import('./modulos/compras/paginas/PaginaNuevaCompra.jsx'));
 const PaginaCompra = lazy(() => import('./modulos/compras/paginas/PaginaCompra.jsx'));
+const PaginaVentas = lazy(() => import('./modulos/ventas/paginas/PaginaVentas.jsx'));
+const PaginaNuevaVenta = lazy(() => import('./modulos/ventas/paginas/PaginaNuevaVenta.jsx'));
+const PaginaVenta = lazy(() => import('./modulos/ventas/paginas/PaginaVenta.jsx'));
 
 /**
  * Rutas de la aplicación.
@@ -52,6 +55,9 @@ export default function App() {
               <Route path="/compras" element={<PaginaCompras />} />
               <Route path="/compras/nueva" element={<PaginaNuevaCompra />} />
               <Route path="/compras/:id" element={<PaginaCompra />} />
+              <Route path="/ventas" element={<PaginaVentas />} />
+              <Route path="/ventas/nueva" element={<PaginaNuevaVenta />} />
+              <Route path="/ventas/:id" element={<PaginaVenta />} />
               <Route element={<RutaProtegida roles={['ADMIN']} />}>
                 <Route path="/usuarios" element={<PaginaUsuarios />} />
                 <Route path="/categorias" element={<PaginaCategorias />} />
