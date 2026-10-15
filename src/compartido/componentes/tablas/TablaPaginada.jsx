@@ -4,7 +4,7 @@
  * Fecha de creación:      2026-10-15
  * Fecha de actualización: 2026-10-15
  * Autores:                Ana Sofía Nagles García, María Mercedes Rincón Valencia, Juan David Camacho Tapiero
- * Versión:                0.3.0
+ * Versión:                0.4.0
  * @file
  */
 import {
@@ -22,6 +22,8 @@ import { OCULTO_VISUAL } from '../../utilidades/ocultoVisual.js';
  * @property {string} campo - Clave única de la columna.
  * @property {string} encabezado - Texto del encabezado.
  * @property {(fila: any) => import('react').ReactNode} [render] - Contenido de la celda (por defecto fila[campo]).
+ * @property {boolean} [secundaria] - Si se oculta en pantallas medianas para que la tabla quepa sin desplazamiento
+ *   horizontal (en móvil, las tarjetas muestran todas las columnas).
  */
 
 /**
@@ -36,6 +38,7 @@ export function TablaPaginada({ titulo, columnas, listado, claveFila = (f) => f.
   const movil = useMediaQuery(tema.breakpoints.down('sm'));
   const filas = listado.datos?.contenido ?? [];
   const celda = (columna, fila) => (columna.render ? columna.render(fila) : fila[columna.campo]);
+  const visibilidad = (columna) => (columna.secundaria ? { display: { xs: 'none', lg: 'table-cell' } } : undefined);
 
   const paginacion = (
     <TablePagination
@@ -87,14 +90,18 @@ export function TablaPaginada({ titulo, columnas, listado, claveFila = (f) => f.
             <Box component="caption" sx={OCULTO_VISUAL}>{titulo}</Box>
             <TableHead>
               <TableRow>
-                {columnas.map((columna) => <TableCell key={columna.campo} scope="col">{columna.encabezado}</TableCell>)}
+                {columnas.map((columna) => (
+                  <TableCell key={columna.campo} scope="col" sx={visibilidad(columna)}>{columna.encabezado}</TableCell>
+                ))}
                 {acciones && <TableCell scope="col" align="right">{t('tabla.acciones')}</TableCell>}
               </TableRow>
             </TableHead>
             <TableBody>
               {filas.map((fila) => (
                 <TableRow key={claveFila(fila)} hover>
-                  {columnas.map((columna) => <TableCell key={columna.campo}>{celda(columna, fila)}</TableCell>)}
+                  {columnas.map((columna) => (
+                    <TableCell key={columna.campo} sx={visibilidad(columna)}>{celda(columna, fila)}</TableCell>
+                  ))}
                   {acciones && <TableCell align="right" sx={{ whiteSpace: 'nowrap' }}>{acciones(fila)}</TableCell>}
                 </TableRow>
               ))}

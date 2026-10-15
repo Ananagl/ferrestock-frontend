@@ -4,7 +4,7 @@
  * Fecha de creación:      2026-10-15
  * Fecha de actualización: 2026-10-15
  * Autores:                Ana Sofía Nagles García, María Mercedes Rincón Valencia, Juan David Camacho Tapiero
- * Versión:                0.3.0
+ * Versión:                0.4.0
  * @file
  */
 import { FormControl, FormHelperText, InputLabel, MenuItem, Select } from '@mui/material';
@@ -27,7 +27,8 @@ export function CampoSeleccion({ name, label, opciones, ayuda, disabled }) {
         SelectDisplayProps={{ 'aria-describedby': conError || ayuda ? idAyuda : undefined }}>
         {opciones.map((o) => <MenuItem key={o.valor} value={o.valor}>{o.texto}</MenuItem>)}
       </Select>
-      {(conError || ayuda) && <FormHelperText id={idAyuda}>{conError ? meta.error : ayuda}</FormHelperText>}
+      {/* Se reserva el espacio del texto de ayuda para que el formulario no cambie de alto */}
+      <FormHelperText id={idAyuda}>{conError ? meta.error : (ayuda ?? ' ')}</FormHelperText>
     </FormControl>
   );
 }
