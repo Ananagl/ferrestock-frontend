@@ -1,0 +1,79 @@
+{
+  "titulo": "Customers and suppliers",
+  "vacio": "No customers or suppliers match the filters.",
+  "campos": {
+    "documento": "Document",
+    "nombre": "Name",
+    "tipoPersona": "Person type",
+    "tipoDocumento": "Document type",
+    "numeroDocumento": "Document number",
+    "dv": "Check digit",
+    "nombreCompleto": "Full name",
+    "razonSocial": "Company name",
+    "telefono": "Phone",
+    "correo": "Email",
+    "direccion": "Address",
+    "roles": "Roles",
+    "rol": "Role",
+    "contacto": "Contact",
+    "estado": "Status"
+  },
+  "personas": {
+    "NATURAL": "Individual",
+    "JURIDICA": "Legal entity"
+  },
+  "documentos": {
+    "CC": "Citizenship ID (CC)",
+    "CE": "Foreigner ID (CE)",
+    "NIT": "Tax ID (NIT)"
+  },
+  "roles": {
+    "cliente": "Customer",
+    "proveedor": "Supplier",
+    "clientes": "Customers",
+    "proveedores": "Suppliers"
+  },
+  "estado": {
+    "activo": "Active",
+    "inactivo": "Inactive"
+  },
+  "filtros": {
+    "etiqueta": "Customer and supplier filters",
+    "buscar": "Search by name or document",
+    "todos": "All"
+  },
+  "acciones": {
+    "nuevo": "New customer or supplier",
+    "activar": "Activate",
+    "desactivar": "Deactivate"
+  },
+  "ayuda": {
+    "numero": "Digits only, without dots or check digit.",
+    "juridica": "A legal entity is identified with a NIT."
+  },
+  "validacion": {
+    "numero": "5 to 15 digits, without dots or spaces.",
+    "dvFormato": "A single digit.",
+    "dv": "The check digit does not match the NIT.",
+    "juridicaNit": "A legal entity can only be identified with a NIT.",
+    "telefono": "7 to 20 characters: numbers, spaces, +, parentheses or hyphen.",
+    "correo": "Invalid email address.",
+    "rol": "Indicate whether it is a customer, a supplier or both."
+  },
+  "dialogo": {
+    "tituloNuevo": "New customer or supplier",
+    "tituloEditar": "Edit {{nombre}}"
+  },
+  "confirmar": {
+    "tituloDesactivar": "Deactivate",
+    "tituloActivar": "Activate",
+    "desactivar": "{{nombre}} cannot be used in new purchases or sales. Their history is kept.",
+    "activar": "{{nombre}} will be available again for new operations."
+  },
+  "avisos": {
+    "creado": "{{nombre}} registered.",
+    "actualizado": "{{nombre}} updated.",
+    "activado": "{{nombre}} activated.",
+    "desactivado": "{{nombre}} deactivated."
+  }
+}

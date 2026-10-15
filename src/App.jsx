@@ -4,7 +4,7 @@
  * Fecha de creación:      2026-10-15
  * Fecha de actualización: 2026-10-15
  * Autores:                Ana Sofía Nagles García, María Mercedes Rincón Valencia, Juan David Camacho Tapiero
- * Versión:                0.4.0
+ * Versión:                0.5.0
  * @file
  */
 import { lazy, Suspense } from 'react';
@@ -22,6 +22,7 @@ const PaginaEnConstruccion = lazy(() => import('./modulos/inicio/paginas/PaginaE
 const PaginaUsuarios = lazy(() => import('./modulos/usuarios/paginas/PaginaUsuarios.jsx'));
 const PaginaProductos = lazy(() => import('./modulos/catalogo/paginas/PaginaProductos.jsx'));
 const PaginaCategorias = lazy(() => import('./modulos/catalogo/paginas/PaginaCategorias.jsx'));
+const PaginaTerceros = lazy(() => import('./modulos/terceros/paginas/PaginaTerceros.jsx'));
 
 /**
  * Rutas de la aplicación.
@@ -39,6 +40,7 @@ export default function App() {
               <Route index element={<PaginaInicio />} />
               <Route path={RUTA_CAMBIO_CONTRASENA} element={<PaginaCambioContrasena />} />
               <Route path="/productos" element={<PaginaProductos />} />
+              <Route path="/terceros" element={<PaginaTerceros />} />
               <Route element={<RutaProtegida roles={['ADMIN']} />}>
                 <Route path="/usuarios" element={<PaginaUsuarios />} />
                 <Route path="/categorias" element={<PaginaCategorias />} />
