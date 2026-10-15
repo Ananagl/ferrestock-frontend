@@ -1,0 +1,48 @@
+{
+  "titulo": "Returns",
+  "vacio": "No returns match the filters.",
+  "filtros": "Return filters",
+  "sinVenta": "No linked sale",
+  "sinVentaAviso": "Without a linked sale, accepted units come in at the current average cost and the return is flagged for the administrator's review.",
+  "aceptadas_one": "{{count}} accepted",
+  "aceptadas_other": "{{count}} accepted",
+  "rechazadas_one": "{{count}} rejected",
+  "rechazadas_other": "{{count}} rejected",
+  "campos": {
+    "cliente": "Customer",
+    "venta": "Original sale",
+    "motivo": "Reason",
+    "resultado": "Result",
+    "validadaPor": "Validated by",
+    "costo": "Re-entry cost"
+  },
+  "resultados": {
+    "ACEPTADA": "Accepted",
+    "RECHAZADA": "Rejected"
+  },
+  "venta": {
+    "ayuda": "Optional: choosing it loads its products with what is left to return.",
+    "eligeCliente": "Choose the customer first.",
+    "sinVentas": "The customer has no recorded sales.",
+    "disponible": "Left to return: {{cantidad}}"
+  },
+  "acciones": {
+    "nueva": "New return",
+    "registrar": "Record return",
+    "volver": "Back to returns",
+    "desdeVenta": "Record return"
+  },
+  "nueva": {
+    "titulo": "New return",
+    "ayuda": "Mark each line as accepted or rejected: only accepted lines go back to stock."
+  },
+  "detalle": {
+    "titulo": "Return {{consecutivo}}"
+  },
+  "validacion": {
+    "supera": "Exceeds what is left to return ({{disponible}})."
+  },
+  "avisos": {
+    "registrada": "Return {{consecutivo}} recorded."
+  }
+}

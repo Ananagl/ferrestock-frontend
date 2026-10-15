@@ -1,0 +1,48 @@
+{
+  "titulo": "Devoluciones",
+  "vacio": "No hay devoluciones que coincidan con los filtros.",
+  "filtros": "Filtros de devoluciones",
+  "sinVenta": "Sin venta vinculada",
+  "sinVentaAviso": "Sin venta vinculada, las unidades aceptadas entran al costo promedio actual y la devolución queda señalada para revisión del administrador.",
+  "aceptadas_one": "{{count}} aceptada",
+  "aceptadas_other": "{{count}} aceptadas",
+  "rechazadas_one": "{{count}} rechazada",
+  "rechazadas_other": "{{count}} rechazadas",
+  "campos": {
+    "cliente": "Cliente",
+    "venta": "Venta de origen",
+    "motivo": "Motivo",
+    "resultado": "Resultado",
+    "validadaPor": "Validó",
+    "costo": "Costo de reingreso"
+  },
+  "resultados": {
+    "ACEPTADA": "Aceptada",
+    "RECHAZADA": "Rechazada"
+  },
+  "venta": {
+    "ayuda": "Opcional: al elegirla se cargan sus productos con lo que queda por devolver.",
+    "eligeCliente": "Elija primero el cliente.",
+    "sinVentas": "El cliente no tiene ventas registradas.",
+    "disponible": "Por devolver: {{cantidad}}"
+  },
+  "acciones": {
+    "nueva": "Nueva devolución",
+    "registrar": "Registrar devolución",
+    "volver": "Volver a devoluciones",
+    "desdeVenta": "Registrar devolución"
+  },
+  "nueva": {
+    "titulo": "Nueva devolución",
+    "ayuda": "Marque cada línea como aceptada o rechazada: solo las aceptadas vuelven al inventario."
+  },
+  "detalle": {
+    "titulo": "Devolución {{consecutivo}}"
+  },
+  "validacion": {
+    "supera": "Supera lo que queda por devolver ({{disponible}})."
+  },
+  "avisos": {
+    "registrada": "Devolución {{consecutivo}} registrada."
+  }
+}
