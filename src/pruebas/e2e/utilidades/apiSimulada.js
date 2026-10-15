@@ -1,10 +1,10 @@
 /**
  * Nombre:                 apiSimulada.js
- * Descripción:            Backend simulado para las pruebas E2E: reproduce los contratos de autenticación y usuarios (04_api_rest.md) sin depender del servidor real.
+ * Descripción:            Backend simulado para las pruebas E2E: reproduce los contratos de autenticación, usuarios y catálogo (04_api_rest.md) sin depender del servidor real.
  * Fecha de creación:      2026-10-15
  * Fecha de actualización: 2026-10-15
  * Autores:                Ana Sofía Nagles García, María Mercedes Rincón Valencia, Juan David Camacho Tapiero
- * Versión:                0.3.0
+ * Versión:                0.4.0
  * @file
  */
 
@@ -39,6 +39,20 @@ export async function instalarApiSimulada(page, opciones = {}) {
   const llamadas = [];
   // Tabla de usuarios para la pantalla de gestión (incremento 2)
   let siguienteId = 100;
+  // Catálogo (incremento 3)
+  const categorias = [
+    { id: 1, nombre: 'Herramientas manuales', activa: true },
+    { id: 2, nombre: 'Eléctricos', activa: true },
+    { id: 3, nombre: 'Descontinuada', activa: false },
+  ];
+  const productos = [
+    { id: 10, codigo: 'FER-001', nombre: 'Martillo de uña 16 oz', descripcion: null, categoria: categorias[0],
+      unidadMedida: 'UNIDAD', permiteFraccion: false, precioVenta: '35000.00', existencias: '8.000', estado: 'ACTIVO', version: 0 },
+    { id: 11, codigo: 'ELE-012', nombre: 'Cable eléctrico N.º 12', descripcion: 'Rollo de 100 m', categoria: categorias[1],
+      unidadMedida: 'METRO', permiteFraccion: true, precioVenta: '2500.50', existencias: '87.500', estado: 'ACTIVO', version: 0 },
+    { id: 12, codigo: 'FER-099', nombre: 'Serrucho antiguo', descripcion: null, categoria: categorias[0],
+      unidadMedida: 'UNIDAD', permiteFraccion: false, precioVenta: '18000.00', existencias: '0.000', estado: 'INACTIVO', version: 0 },
+  ];
   const tabla = Object.values(USUARIOS).map((u) => ({
     id: u.id, nombreUsuario: u.nombreUsuario, nombreCompleto: u.nombreCompleto, rol: u.rol, activo: true,
     bloqueado: Boolean(u.bloqueado), debeCambiarPassword: u.debeCambiarPassword,
@@ -88,8 +102,91 @@ export async function instalarApiSimulada(page, opciones = {}) {
       return ruta.fulfill({ status: 204 });
     }
     if (camino.startsWith('/usuarios')) return responderUsuarios(ruta, metodo, camino, cuerpo);
+    if (camino.startsWith('/categorias')) return responderCategorias(ruta, metodo, camino, cuerpo);
+    if (camino.startsWith('/productos')) return responderProductos(ruta, metodo, camino, cuerpo);
     return ruta.fulfill(problema(404, 'NO_ENCONTRADO', 'No encontrado'));
   });
+
+  /** Simula la API de categorías: consulta para todos, gestión solo ADMIN. */
+  function responderCategorias(ruta, metodo, camino, cuerpo) {
+    if (metodo === 'GET') {
+      const activa = new URL(ruta.request().url()).searchParams.get('activa');
+      return ruta.fulfill({ json: categorias.filter((c) => activa === null || String(c.activa) === activa)
+        .sort((a, b) => a.nombre.localeCompare(b.nombre)) });
+    }
+    if (actual?.rol !== 'ADMIN') return ruta.fulfill(problema(403, 'ACCESO_DENEGADO', 'Acceso denegado'));
+    const id = Number(camino.split('/')[2]);
+    if (metodo === 'POST' || metodo === 'PUT') {
+      if (categorias.some((c) => c.id !== id && c.nombre.toLowerCase() === cuerpo.nombre.toLowerCase())) {
+        return ruta.fulfill(problema(409, 'DUPLICADO', 'Ya existe un registro con ese valor.',
+          { errores: [{ campo: 'nombre', mensaje: 'Ya existe un registro con ese valor.' }] }));
+      }
+      if (metodo === 'POST') {
+        const nueva = { id: siguienteId++, nombre: cuerpo.nombre, activa: true };
+        categorias.push(nueva);
+        return ruta.fulfill({ status: 201, json: nueva });
+      }
+      const categoria = categorias.find((c) => c.id === id);
+      categoria.nombre = cuerpo.nombre;
+      return ruta.fulfill({ json: categoria });
+    }
+    const categoria = categorias.find((c) => c.id === id);
+    categoria.activa = cuerpo.activa;
+    return ruta.fulfill({ json: categoria });
+  }
+
+  /** Simula la API de productos (ADMIN y OPERATIVO) con bloqueo optimista por versión. */
+  function responderProductos(ruta, metodo, camino, cuerpo) {
+    const url = new URL(ruta.request().url());
+    const id = Number(camino.split('/')[2]);
+    const producto = productos.find((p) => p.id === id);
+    if (metodo === 'GET' && camino === '/productos') {
+      const q = (url.searchParams.get('q') ?? '').toLowerCase();
+      const categoriaId = url.searchParams.get('categoriaId');
+      const estado = url.searchParams.get('estado');
+      const pagina = Number(url.searchParams.get('pagina') ?? 0);
+      const tamano = Number(url.searchParams.get('tamano') ?? 20);
+      const filtrados = productos
+        .filter((p) => !q || p.codigo.toLowerCase().includes(q) || p.nombre.toLowerCase().includes(q))
+        .filter((p) => !categoriaId || String(p.categoria.id) === categoriaId)
+        .filter((p) => !estado || p.estado === estado)
+        .sort((a, b) => a.nombre.localeCompare(b.nombre));
+      return ruta.fulfill({ json: { contenido: filtrados.slice(pagina * tamano, (pagina + 1) * tamano), pagina, tamano,
+        totalElementos: filtrados.length, totalPaginas: Math.ceil(filtrados.length / tamano) } });
+    }
+    if (metodo === 'POST') {
+      const codigo = cuerpo.codigo.toUpperCase();
+      if (productos.some((p) => p.codigo === codigo)) {
+        return ruta.fulfill(problema(409, 'DUPLICADO', 'Ya existe un registro con ese valor.',
+          { errores: [{ campo: 'codigo', mensaje: 'Ya existe un registro con ese valor.' }] }));
+      }
+      const nuevo = { ...cuerpo, id: siguienteId++, codigo, categoria: categorias.find((c) => c.id === cuerpo.categoriaId),
+        precioVenta: Number(cuerpo.precioVenta).toFixed(2), existencias: '0.000', estado: 'ACTIVO', version: 0 };
+      productos.push(nuevo);
+      return ruta.fulfill({ status: 201, json: nuevo });
+    }
+    if (!producto) return ruta.fulfill(problema(404, 'NO_ENCONTRADO', 'No encontrado'));
+    if (metodo === 'PUT') {
+      if (cuerpo.version !== producto.version) {
+        return ruta.fulfill(problema(409, 'VERSION_DESACTUALIZADA', 'Otra persona modificó este registro.'));
+      }
+      Object.assign(producto, { nombre: cuerpo.nombre, descripcion: cuerpo.descripcion, unidadMedida: cuerpo.unidadMedida,
+        permiteFraccion: cuerpo.permiteFraccion, categoria: categorias.find((c) => c.id === cuerpo.categoriaId),
+        version: producto.version + 1 });
+      return ruta.fulfill({ json: producto });
+    }
+    if (camino.endsWith('/precio')) {
+      producto.precioVenta = Number(cuerpo.precioVenta).toFixed(2);
+      producto.version += 1;
+      return ruta.fulfill({ json: producto });
+    }
+    if (camino.endsWith('/estado')) {
+      producto.estado = cuerpo.estado;
+      producto.version += 1;
+      return ruta.fulfill({ json: producto });
+    }
+    return ruta.fulfill(problema(404, 'NO_ENCONTRADO', 'No encontrado'));
+  }
 
   /** Simula la API de usuarios (solo ADMIN) sobre la tabla en memoria. */
   function responderUsuarios(ruta, metodo, camino, cuerpo) {
@@ -143,7 +240,13 @@ export async function instalarApiSimulada(page, opciones = {}) {
     return ruta.fulfill(problema(404, 'NO_ENCONTRADO', 'No encontrado'));
   }
 
-  return { llamadas };
+  return {
+    llamadas,
+    /** Simula que otra persona editó el producto (sube su versión en el "servidor"). */
+    modificarProductoPorOtro(id) {
+      productos.find((p) => p.id === id).version += 1;
+    },
+  };
 }
 
 /**
