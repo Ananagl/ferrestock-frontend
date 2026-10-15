@@ -1,10 +1,10 @@
 /**
  * Nombre:                 apiSimulada.js
- * Descripción:            Backend simulado para las pruebas E2E: reproduce los contratos de autenticación, usuarios, catálogo y terceros (04_api_rest.md) sin depender del servidor real.
+ * Descripción:            Backend simulado para las pruebas E2E: reproduce los contratos de autenticación, usuarios, catálogo, terceros e inventario (04_api_rest.md) sin depender del servidor real.
  * Fecha de creación:      2026-10-15
  * Fecha de actualización: 2026-10-15
  * Autores:                Ana Sofía Nagles García, María Mercedes Rincón Valencia, Juan David Camacho Tapiero
- * Versión:                0.5.0
+ * Versión:                0.6.0
  * @file
  */
 import { calcularDigitoNit } from '../../../compartido/utilidades/nit.js';
@@ -53,6 +53,20 @@ export async function instalarApiSimulada(page, opciones = {}) {
     { id: 21, tipoPersona: 'NATURAL', tipoDocumento: 'CC', numeroDocumento: '1020304050', digitoVerificacion: null,
       nombre: 'Carlos Pérez', telefono: null, correo: null, direccion: null, esCliente: true, esProveedor: false, activo: true },
   ];
+  // Kardex de FER-001 (CA-INV-01): entrada de 10, venta de 3 y ajuste de salida de 1 → saldo 6... más 2 de compra = 8
+  const kardex = {
+    10: [
+      { id: 4, fecha: '2026-10-15T14:00:00Z', tipo: 'COMPRA', naturaleza: 'ENTRADA', cantidad: '2.000', saldoResultante: '8.000',
+        documentoTipo: 'COMPRA', documentoId: 2, usuario: 'operador', costoUnitario: '21000.0000', costoPromedioResultante: '20250.0000' },
+      { id: 3, fecha: '2026-10-14T18:00:00Z', tipo: 'AJUSTE_SALIDA', naturaleza: 'SALIDA', cantidad: '1.000', saldoResultante: '6.000',
+        documentoTipo: 'AJUSTE', documentoId: 1, usuario: 'admin', costoUnitario: '20000.0000', costoPromedioResultante: '20000.0000' },
+      { id: 2, fecha: '2026-10-14T15:00:00Z', tipo: 'VENTA', naturaleza: 'SALIDA', cantidad: '3.000', saldoResultante: '7.000',
+        documentoTipo: 'VENTA', documentoId: 1, usuario: 'operador', costoUnitario: '20000.0000', costoPromedioResultante: '20000.0000' },
+      { id: 1, fecha: '2026-10-13T15:00:00Z', tipo: 'COMPRA', naturaleza: 'ENTRADA', cantidad: '10.000', saldoResultante: '10.000',
+        documentoTipo: 'COMPRA', documentoId: 1, usuario: 'operador', costoUnitario: '20000.0000', costoPromedioResultante: '20000.0000' },
+    ],
+  };
+  const costos = { 10: '20250.0000', 11: '1800.0000', 12: '0.0000' };
   const productos = [
     { id: 10, codigo: 'FER-001', nombre: 'Martillo de uña 16 oz', descripcion: null, categoria: categorias[0],
       unidadMedida: 'UNIDAD', permiteFraccion: false, precioVenta: '35000.00', existencias: '8.000', estado: 'ACTIVO', version: 0 },
@@ -111,6 +125,8 @@ export async function instalarApiSimulada(page, opciones = {}) {
     }
     if (camino.startsWith('/usuarios')) return responderUsuarios(ruta, metodo, camino, cuerpo);
     if (camino.startsWith('/categorias')) return responderCategorias(ruta, metodo, camino, cuerpo);
+    // El kardex (/productos/{id}/movimientos) se atiende antes que el resto de /productos
+    if (camino.startsWith('/inventario') || /^\/productos\/\d+\/movimientos$/.test(camino)) return responderInventario(ruta, camino);
     if (camino.startsWith('/productos')) return responderProductos(ruta, metodo, camino, cuerpo);
     if (camino.startsWith('/terceros')) return responderTerceros(ruta, metodo, camino, cuerpo);
     return ruta.fulfill(problema(404, 'NO_ENCONTRADO', 'No encontrado'));
@@ -175,6 +191,7 @@ export async function instalarApiSimulada(page, opciones = {}) {
       return ruta.fulfill({ status: 201, json: nuevo });
     }
     if (!producto) return ruta.fulfill(problema(404, 'NO_ENCONTRADO', 'No encontrado'));
+    if (metodo === 'GET') return ruta.fulfill({ json: producto });
     if (metodo === 'PUT') {
       if (cuerpo.version !== producto.version) {
         return ruta.fulfill(problema(409, 'VERSION_DESACTUALIZADA', 'Otra persona modificó este registro.'));
@@ -195,6 +212,44 @@ export async function instalarApiSimulada(page, opciones = {}) {
       return ruta.fulfill({ json: producto });
     }
     return ruta.fulfill(problema(404, 'NO_ENCONTRADO', 'No encontrado'));
+  }
+
+  /** Simula la API de consulta de inventario; los costos solo se envían al ADMIN (DP-15). */
+  function responderInventario(ruta, camino) {
+    const url = new URL(ruta.request().url());
+    const admin = actual?.rol === 'ADMIN';
+    if (camino === '/inventario/existencias') {
+      const q = (url.searchParams.get('q') ?? '').toLowerCase();
+      const solo = url.searchParams.get('soloConExistencias') === 'true';
+      const contenido = productos
+        .filter((p) => !q || p.codigo.toLowerCase().includes(q) || p.nombre.toLowerCase().includes(q))
+        .filter((p) => !solo || Number(p.existencias) > 0)
+        .map((p) => ({
+          productoId: p.id, codigo: p.codigo, nombre: p.nombre, categoria: p.categoria.nombre, unidadMedida: p.unidadMedida,
+          estado: p.estado, existencias: p.existencias,
+          ...(admin ? { costoPromedio: costos[p.id] ?? '0.0000',
+            valorInventario: (Number(p.existencias) * Number(costos[p.id] ?? 0)).toFixed(2) } : {}),
+        }));
+      return ruta.fulfill({ json: { contenido, pagina: 0, tamano: 20, totalElementos: contenido.length, totalPaginas: 1 } });
+    }
+    if (camino === '/inventario/valorizacion') {
+      if (!admin) return ruta.fulfill(problema(403, 'ACCESO_DENEGADO', 'Acceso denegado'));
+      return ruta.fulfill({ json: { total: '319500.00', categorias: [
+        { categoriaId: 1, nombre: 'Herramientas manuales', productos: 1, valor: '162000.00' },
+        { categoriaId: 2, nombre: 'Eléctricos', productos: 1, valor: '157500.00' },
+      ] } });
+    }
+    if (camino === '/inventario/verificacion') {
+      if (!admin) return ruta.fulfill(problema(403, 'ACCESO_DENEGADO', 'Acceso denegado'));
+      return ruta.fulfill({ json: [] });
+    }
+    const id = Number(camino.split('/')[2]);
+    if (!productos.some((p) => p.id === id)) return ruta.fulfill(problema(404, 'NO_ENCONTRADO', 'No encontrado'));
+    const tipo = url.searchParams.get('tipo');
+    const contenido = (kardex[id] ?? [])
+      .filter((m) => !tipo || m.tipo === tipo)
+      .map((m) => (admin ? m : { ...m, costoUnitario: undefined, costoPromedioResultante: undefined }));
+    return ruta.fulfill({ json: { contenido, pagina: 0, tamano: 20, totalElementos: contenido.length, totalPaginas: 1 } });
   }
 
   /** Simula la API de terceros con las reglas del backend (DV del NIT, duplicados, rol requerido). */
