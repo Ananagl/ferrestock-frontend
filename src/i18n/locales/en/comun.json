@@ -36,7 +36,8 @@
     "comprobantes": "Receipts",
     "ajustes": "Adjustments",
     "auditoria": "Audit log",
-    "usuarios": "Users"
+    "usuarios": "Users",
+    "categorias": "Categories"
   },
   "usuario": {
     "menu": "{{nombre}}'s menu",

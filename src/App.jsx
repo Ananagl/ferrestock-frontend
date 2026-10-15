@@ -4,7 +4,7 @@
  * Fecha de creación:      2026-10-15
  * Fecha de actualización: 2026-10-15
  * Autores:                Ana Sofía Nagles García, María Mercedes Rincón Valencia, Juan David Camacho Tapiero
- * Versión:                0.3.0
+ * Versión:                0.4.0
  * @file
  */
 import { lazy, Suspense } from 'react';
@@ -20,6 +20,8 @@ const PaginaCambioContrasena = lazy(() => import('./modulos/autenticacion/pagina
 const PaginaInicio = lazy(() => import('./modulos/inicio/paginas/PaginaInicio.jsx'));
 const PaginaEnConstruccion = lazy(() => import('./modulos/inicio/paginas/PaginaEnConstruccion.jsx'));
 const PaginaUsuarios = lazy(() => import('./modulos/usuarios/paginas/PaginaUsuarios.jsx'));
+const PaginaProductos = lazy(() => import('./modulos/catalogo/paginas/PaginaProductos.jsx'));
+const PaginaCategorias = lazy(() => import('./modulos/catalogo/paginas/PaginaCategorias.jsx'));
 
 /**
  * Rutas de la aplicación.
@@ -36,8 +38,10 @@ export default function App() {
             <Route element={<Plantilla />}>
               <Route index element={<PaginaInicio />} />
               <Route path={RUTA_CAMBIO_CONTRASENA} element={<PaginaCambioContrasena />} />
+              <Route path="/productos" element={<PaginaProductos />} />
               <Route element={<RutaProtegida roles={['ADMIN']} />}>
                 <Route path="/usuarios" element={<PaginaUsuarios />} />
+                <Route path="/categorias" element={<PaginaCategorias />} />
               </Route>
               {pendientes.map((opcion) => (
                 <Route key={opcion.ruta} element={<RutaProtegida roles={opcion.roles} />}>
