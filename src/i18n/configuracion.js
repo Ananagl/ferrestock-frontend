@@ -1,0 +1,47 @@
+/**
+ * Nombre:                 configuracion.js
+ * Descripción:            Configuración de i18next: español por defecto e inglés, detección del idioma y
+ *                         sincronización del atributo lang del documento (RNF-USA-01).
+ * Fecha de creación:      2026-10-15
+ * Fecha de actualización: 2026-10-15
+ * Autores:                Ana Sofía Nagles García, María Mercedes Rincón Valencia, Juan David Camacho Tapiero
+ * Versión:                0.1.0
+ * @file
+ */
+import i18n from 'i18next';
+import { initReactI18next } from 'react-i18next';
+import DetectorIdioma from 'i18next-browser-languagedetector';
+import comunEs from './locales/es/comun.json';
+import comunEn from './locales/en/comun.json';
+
+/** Idiomas soportados por la aplicación. */
+export const IDIOMAS = Object.freeze(['es', 'en']);
+
+i18n
+  .use(DetectorIdioma)
+  .use(initReactI18next)
+  .init({
+    resources: {
+      es: { comun: comunEs },
+      en: { comun: comunEn },
+    },
+    supportedLngs: IDIOMAS,
+    fallbackLng: 'es',
+    nonExplicitSupportedLngs: true,
+    defaultNS: 'comun',
+    interpolation: { escapeValue: false },
+    detection: {
+      order: ['localStorage', 'navigator'],
+      lookupLocalStorage: 'fs.idioma',
+      caches: ['localStorage'],
+    },
+  });
+
+/** Mantiene <html lang> alineado con el idioma activo, para lectores de pantalla. */
+function sincronizarLang(idioma) {
+  document.documentElement.lang = idioma?.startsWith('en') ? 'en' : 'es';
+}
+sincronizarLang(i18n.resolvedLanguage);
+i18n.on('languageChanged', sincronizarLang);
+
+export default i18n;

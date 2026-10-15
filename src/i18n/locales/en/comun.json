@@ -1,0 +1,25 @@
+{
+  "app": {
+    "nombre": "FerreStock",
+    "lema": "Inventory for your hardware store",
+    "saltarContenido": "Skip to content"
+  },
+  "idioma": {
+    "etiqueta": "Idioma / Language",
+    "es": "Español",
+    "en": "English"
+  },
+  "tema": {
+    "alternarOscuro": "Switch to dark theme",
+    "alternarClaro": "Switch to light theme"
+  },
+  "baseTecnica": {
+    "titulo": "Technical base ready",
+    "descripcion": "This neutral screen checks that the frontend starts and talks to the backend. Functional screens arrive in Phase 4.",
+    "estadoBackend": "Backend status",
+    "verificando": "Checking connection…",
+    "conectado": "Connected: the backend responds correctly.",
+    "sinConexion": "No connection to the backend.",
+    "reintentar": "Retry"
+  }
+}

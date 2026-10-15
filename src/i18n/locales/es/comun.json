@@ -1,0 +1,25 @@
+{
+  "app": {
+    "nombre": "FerreStock",
+    "lema": "Inventario para tu ferretería",
+    "saltarContenido": "Saltar al contenido"
+  },
+  "idioma": {
+    "etiqueta": "Idioma / Language",
+    "es": "Español",
+    "en": "English"
+  },
+  "tema": {
+    "alternarOscuro": "Cambiar a tema oscuro",
+    "alternarClaro": "Cambiar a tema claro"
+  },
+  "baseTecnica": {
+    "titulo": "Base técnica lista",
+    "descripcion": "Esta pantalla neutra comprueba que el frontend arranca y se comunica con el backend. Las pantallas funcionales llegan en la Fase 4.",
+    "estadoBackend": "Estado del backend",
+    "verificando": "Verificando conexión…",
+    "conectado": "Conectado: el backend responde correctamente.",
+    "sinConexion": "Sin conexión con el backend.",
+    "reintentar": "Reintentar"
+  }
+}
