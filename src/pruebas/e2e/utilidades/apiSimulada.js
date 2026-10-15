@@ -1,10 +1,10 @@
 /**
  * Nombre:                 apiSimulada.js
- * Descripción:            Backend simulado para las pruebas E2E: reproduce los contratos de autenticación, usuarios, catálogo, terceros, inventario y ajustes (04_api_rest.md) sin depender del servidor real.
+ * Descripción:            Backend simulado para las pruebas E2E: reproduce los contratos de autenticación, usuarios, catálogo, terceros, inventario, ajustes y documentos (04_api_rest.md) sin depender del servidor real.
  * Fecha de creación:      2026-10-15
  * Fecha de actualización: 2026-10-15
  * Autores:                Ana Sofía Nagles García, María Mercedes Rincón Valencia, Juan David Camacho Tapiero
- * Versión:                0.7.0
+ * Versión:                0.8.0
  * @file
  */
 import { calcularDigitoNit } from '../../../compartido/utilidades/nit.js';
@@ -81,6 +81,17 @@ export async function instalarApiSimulada(page, opciones = {}) {
       productoNombre: 'Martillo de uña 16 oz', tipo: 'SALIDA', cantidad: '1.000', costoUnitario: '20000.0000',
       motivo: 'Unidad dañada en bodega', usuario: 'admin' },
   ];
+  // Compras (incremento 7): las dos compras del kardex de FER-001
+  const compras = [
+    { id: 1, consecutivo: 'COM-000001', fecha: '2026-10-13T15:00:00Z', proveedorId: 20, proveedorNombre: 'Distribuidora Antioquia SAS',
+      observacion: 'Factura FV-881', total: '200000.00', estado: 'REGISTRADA', motivoAnulacion: null, anuladaPor: null, anuladaEn: null,
+      usuario: 'operador', lineas: [{ id: 1, productoId: 10, productoCodigo: 'FER-001', productoNombre: 'Martillo de uña 16 oz',
+        cantidad: '10.000', costoUnitario: '20000.0000', subtotal: '200000.00' }] },
+    { id: 2, consecutivo: 'COM-000002', fecha: '2026-10-15T14:00:00Z', proveedorId: 20, proveedorNombre: 'Distribuidora Antioquia SAS',
+      observacion: null, total: '42000.00', estado: 'REGISTRADA', motivoAnulacion: null, anuladaPor: null, anuladaEn: null,
+      usuario: 'operador', lineas: [{ id: 2, productoId: 10, productoCodigo: 'FER-001', productoNombre: 'Martillo de uña 16 oz',
+        cantidad: '2.000', costoUnitario: '21000.0000', subtotal: '42000.00' }] },
+  ];
   const tabla = Object.values(USUARIOS).map((u) => ({
     id: u.id, nombreUsuario: u.nombreUsuario, nombreCompleto: u.nombreCompleto, rol: u.rol, activo: true,
     bloqueado: Boolean(u.bloqueado), debeCambiarPassword: u.debeCambiarPassword,
@@ -136,6 +147,7 @@ export async function instalarApiSimulada(page, opciones = {}) {
     if (camino.startsWith('/productos')) return responderProductos(ruta, metodo, camino, cuerpo);
     if (camino.startsWith('/terceros')) return responderTerceros(ruta, metodo, camino, cuerpo);
     if (camino.startsWith('/ajustes')) return responderAjustes(ruta, metodo, cuerpo);
+    if (camino.startsWith('/compras')) return responderCompras(ruta, metodo, camino, cuerpo);
     return ruta.fulfill(problema(404, 'NO_ENCONTRADO', 'No encontrado'));
   });
 
@@ -320,6 +332,82 @@ export async function instalarApiSimulada(page, opciones = {}) {
     });
     return ruta.fulfill({ status: 201, json: { ...ajuste, existenciasResultantes: producto.existencias,
       costoPromedioResultante: costos[producto.id] } });
+  }
+
+  /** Mueve existencias, CPP y kardex de un producto simulado, como MovimientoInventarioServicio. */
+  function mover(producto, tipo, naturaleza, cantidad, costo, documentoTipo, documentoId, { pondera = false, restaurar = null } = {}) {
+    const existencias = Number(producto.existencias);
+    const cpp = Number(costos[producto.id] ?? 0);
+    const saldo = existencias + (naturaleza === 'ENTRADA' ? cantidad : -cantidad);
+    let nuevo = cpp;
+    if (pondera) nuevo = existencias === 0 ? costo : (existencias * cpp + cantidad * costo) / saldo;
+    if (restaurar !== null) nuevo = restaurar;
+    producto.existencias = saldo.toFixed(3);
+    costos[producto.id] = nuevo.toFixed(4);
+    (kardex[producto.id] ??= []).unshift({
+      id: Date.now(), fecha: new Date().toISOString(), tipo, naturaleza, cantidad: cantidad.toFixed(3), saldoResultante: producto.existencias,
+      documentoTipo, documentoId, usuario: actual.nombreUsuario, costoUnitario: costo.toFixed(4), costoPromedioResultante: costos[producto.id],
+    });
+  }
+
+  /** Respuesta paginada simple. */
+  function pagina(ruta, contenido) {
+    return ruta.fulfill({ json: { contenido, pagina: 0, tamano: 20, totalElementos: contenido.length, totalPaginas: 1 } });
+  }
+
+  /** Simula la API de compras: registro con recepción completa y anulación solo ADMIN (03_inventario_y_costos.md, 5.2). */
+  function responderCompras(ruta, metodo, camino, cuerpo) {
+    const url = new URL(ruta.request().url());
+    const id = Number(camino.split('/')[2]);
+    if (metodo === 'GET' && camino === '/compras') {
+      const proveedorId = url.searchParams.get('proveedorId');
+      const estado = url.searchParams.get('estado');
+      return pagina(ruta, [...compras].reverse()
+        .filter((c) => !proveedorId || String(c.proveedorId) === proveedorId)
+        .filter((c) => !estado || c.estado === estado)
+        .map((c) => ({ ...c, lineas: undefined })));
+    }
+    if (metodo === 'POST' && camino === '/compras') {
+      const proveedor = terceros.find((x) => x.id === cuerpo.proveedorId);
+      if (!proveedor?.esProveedor || !proveedor.activo) {
+        return ruta.fulfill(problema(409, 'TERCERO_INACTIVO', 'El proveedor no está disponible.',
+          { errores: [{ campo: 'proveedorId', mensaje: 'El proveedor no está disponible.' }] }));
+      }
+      const nueva = { id: compras.length + 1, consecutivo: `COM-${String(compras.length + 1).padStart(6, '0')}`,
+        fecha: new Date().toISOString(), proveedorId: proveedor.id, proveedorNombre: proveedor.nombre, observacion: cuerpo.observacion,
+        estado: 'REGISTRADA', motivoAnulacion: null, anuladaPor: null, anuladaEn: null, usuario: actual.nombreUsuario, lineas: [] };
+      let total = 0;
+      cuerpo.lineas.forEach((l, i) => {
+        const producto = productos.find((p) => p.id === l.productoId);
+        const cantidad = Number(l.cantidad);
+        const costo = Number(l.costoUnitario);
+        const subtotal = Math.round(cantidad * costo * 100) / 100;
+        total += subtotal;
+        nueva.lineas.push({ id: 100 + i, productoId: producto.id, productoCodigo: producto.codigo, productoNombre: producto.nombre,
+          cantidad: cantidad.toFixed(3), costoUnitario: costo.toFixed(4), subtotal: subtotal.toFixed(2) });
+        mover(producto, 'COMPRA', 'ENTRADA', cantidad, costo, 'COMPRA', nueva.id, { pondera: true });
+      });
+      nueva.total = total.toFixed(2);
+      compras.push(nueva);
+      return ruta.fulfill({ status: 201, json: nueva });
+    }
+    const compra = compras.find((c) => c.id === id);
+    if (!compra) return ruta.fulfill(problema(404, 'NO_ENCONTRADO', 'No encontrado'));
+    if (metodo === 'GET') return ruta.fulfill({ json: compra });
+    if (actual?.rol !== 'ADMIN') return ruta.fulfill(problema(403, 'ACCESO_DENEGADO', 'Acceso denegado'));
+    if (compras.some((c) => c.id > compra.id && c.estado === 'REGISTRADA'
+      && c.lineas.some((l) => compra.lineas.some((x) => x.productoId === l.productoId)))) {
+      return ruta.fulfill(problema(409, 'COMPRA_CON_MOVIMIENTOS_POSTERIORES',
+        `Después de esta compra hubo otras entradas de ${compra.lineas[0].productoCodigo} que cambiaron su costo promedio.`));
+    }
+    compra.lineas.forEach((l) => {
+      const producto = productos.find((p) => p.id === l.productoId);
+      mover(producto, 'ANULACION_COMPRA', 'SALIDA', Number(l.cantidad), Number(l.costoUnitario), 'COMPRA', compra.id,
+        { restaurar: 20000 });
+    });
+    Object.assign(compra, { estado: 'ANULADA', motivoAnulacion: cuerpo.motivo, anuladaPor: actual.nombreUsuario,
+      anuladaEn: new Date().toISOString() });
+    return ruta.fulfill({ json: compra });
   }
 
   /** Simula la API de terceros con las reglas del backend (DV del NIT, duplicados, rol requerido). */
