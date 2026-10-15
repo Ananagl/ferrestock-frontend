@@ -4,7 +4,7 @@
  * Fecha de creación:      2026-10-15
  * Fecha de actualización: 2026-10-15
  * Autores:                Ana Sofía Nagles García, María Mercedes Rincón Valencia, Juan David Camacho Tapiero
- * Versión:                0.9.0
+ * Versión:                0.10.0
  * @file
  */
 import { calcularDigitoNit } from '../../../compartido/utilidades/nit.js';
@@ -159,6 +159,16 @@ export async function instalarApiSimulada(page, opciones = {}) {
     if (camino.startsWith('/compras')) return responderCompras(ruta, metodo, camino, cuerpo);
     if (camino.startsWith('/ventas')) return responderVentas(ruta, metodo, camino, cuerpo);
     if (camino.startsWith('/devoluciones')) return responderDevoluciones(ruta, metodo, camino, cuerpo);
+    if (camino.startsWith('/comprobantes')) return responderComprobantes(ruta, camino);
+    if (camino === '/auditoria') {
+      if (actual?.rol !== 'ADMIN') return ruta.fulfill(problema(403, 'ACCESO_DENEGADO', 'Acceso denegado'));
+      const usuarioId = new URL(peticion.url()).searchParams.get('usuarioId');
+      return pagina(ruta, [
+        { id: 2, usuarioId: 1, nombreUsuario: 'operador', fecha: '2026-10-14T15:15:00Z', accion: 'VENTA_REGISTRADA',
+          descripcion: 'Venta VEN-000001 a Carlos Pérez por 105000.00 (recibido 110000.00, cambio 5000.00)' },
+        { id: 1, usuarioId: 2, nombreUsuario: 'admin', fecha: '2026-10-14T13:00:00Z', accion: 'LOGIN_EXITOSO', descripcion: 'Inicio de sesión' },
+      ].filter((e) => !usuarioId || String(e.usuarioId) === usuarioId));
+    }
     return ruta.fulfill(problema(404, 'NO_ENCONTRADO', 'No encontrado'));
   });
 
@@ -531,6 +541,25 @@ export async function instalarApiSimulada(page, opciones = {}) {
     });
     devoluciones.push(nueva);
     return ruta.fulfill({ status: 201, json: nueva });
+  }
+
+  /** Simula la API de comprobantes: búsqueda sobre ventas y compras y el comprobante de una venta. */
+  function responderComprobantes(ruta, camino) {
+    if (camino === '/comprobantes') {
+      return pagina(ruta, [...ventas.map((v) => ({ tipo: 'VENTA', consecutivo: v.consecutivo, fecha: v.fecha, tercero: v.clienteNombre,
+        total: v.total, estado: v.estado })), ...compras.map((c) => ({ tipo: 'COMPRA', consecutivo: c.consecutivo, fecha: c.fecha,
+        tercero: c.proveedorNombre, total: c.total, estado: c.estado }))]);
+    }
+    const [, , tipo, consecutivo] = camino.split('/');
+    const venta = tipo === 'VENTA' && ventas.find((v) => v.consecutivo === consecutivo);
+    if (!venta) return ruta.fulfill(problema(404, 'NO_ENCONTRADO', 'No encontrado'));
+    return ruta.fulfill({ json: { negocio: { nombre: 'Ferretería FerreStock', nit: '900123456-7', direccion: 'Calle 10 # 20-30, Bogotá' },
+      tipo, consecutivo, fecha: venta.fecha, estado: venta.estado, tercero: { nombre: venta.clienteNombre, documento: 'CC 1020304050' },
+      usuario: venta.usuario, referencia: null, motivo: null,
+      lineas: venta.lineas.map((l) => ({ codigo: l.productoCodigo, descripcion: l.productoNombre, cantidad: l.cantidad,
+        valorUnitario: l.precioUnitario, subtotal: l.subtotal, detalle: null })),
+      total: venta.total, valorRecibido: venta.valorRecibido, cambio: venta.cambio,
+      leyenda: 'Documento simulado — sin validez fiscal — no transmitido a la DIAN' } });
   }
 
   /** Simula la API de terceros con las reglas del backend (DV del NIT, duplicados, rol requerido). */

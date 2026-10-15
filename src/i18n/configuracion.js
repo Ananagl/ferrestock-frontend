@@ -5,7 +5,7 @@
  * Fecha de creación:      2026-10-15
  * Fecha de actualización: 2026-10-15
  * Autores:                Ana Sofía Nagles García, María Mercedes Rincón Valencia, Juan David Camacho Tapiero
- * Versión:                0.9.0
+ * Versión:                0.10.0
  * @file
  */
 import i18n from 'i18next';
@@ -35,6 +35,10 @@ import ventasEs from './locales/es/ventas.json';
 import ventasEn from './locales/en/ventas.json';
 import devolucionesEs from './locales/es/devoluciones.json';
 import devolucionesEn from './locales/en/devoluciones.json';
+import comprobantesEs from './locales/es/comprobantes.json';
+import comprobantesEn from './locales/en/comprobantes.json';
+import auditoriaEs from './locales/es/auditoria.json';
+import auditoriaEn from './locales/en/auditoria.json';
 
 /** Idiomas soportados por la aplicación. */
 export const IDIOMAS = Object.freeze(['es', 'en']);
@@ -45,9 +49,11 @@ i18n
   .init({
     resources: {
       es: { comun: comunEs, auth: authEs, validacion: validacionEs, usuarios: usuariosEs, catalogo: catalogoEs, terceros: tercerosEs, inventario: inventarioEs, ajustes: ajustesEs,
-        documentos: documentosEs, compras: comprasEs, ventas: ventasEs, devoluciones: devolucionesEs },
+        documentos: documentosEs, compras: comprasEs, ventas: ventasEs, devoluciones: devolucionesEs,
+        comprobantes: comprobantesEs, auditoria: auditoriaEs },
       en: { comun: comunEn, auth: authEn, validacion: validacionEn, usuarios: usuariosEn, catalogo: catalogoEn, terceros: tercerosEn, inventario: inventarioEn, ajustes: ajustesEn,
-        documentos: documentosEn, compras: comprasEn, ventas: ventasEn, devoluciones: devolucionesEn },
+        documentos: documentosEn, compras: comprasEn, ventas: ventasEn, devoluciones: devolucionesEn,
+        comprobantes: comprobantesEn, auditoria: auditoriaEn },
     },
     supportedLngs: IDIOMAS,
     fallbackLng: 'es',

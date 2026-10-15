@@ -4,7 +4,7 @@
  * Fecha de creación:      2026-10-15
  * Fecha de actualización: 2026-10-15
  * Autores:                Ana Sofía Nagles García, María Mercedes Rincón Valencia, Juan David Camacho Tapiero
- * Versión:                0.9.0
+ * Versión:                0.10.0
  * @file
  */
 import { lazy, Suspense } from 'react';
@@ -35,6 +35,9 @@ const PaginaVenta = lazy(() => import('./modulos/ventas/paginas/PaginaVenta.jsx'
 const PaginaDevoluciones = lazy(() => import('./modulos/devoluciones/paginas/PaginaDevoluciones.jsx'));
 const PaginaNuevaDevolucion = lazy(() => import('./modulos/devoluciones/paginas/PaginaNuevaDevolucion.jsx'));
 const PaginaDevolucion = lazy(() => import('./modulos/devoluciones/paginas/PaginaDevolucion.jsx'));
+const PaginaComprobantes = lazy(() => import('./modulos/comprobantes/paginas/PaginaComprobantes.jsx'));
+const PaginaComprobante = lazy(() => import('./modulos/comprobantes/paginas/PaginaComprobante.jsx'));
+const PaginaAuditoria = lazy(() => import('./modulos/auditoria/paginas/PaginaAuditoria.jsx'));
 
 /**
  * Rutas de la aplicación.
@@ -64,10 +67,13 @@ export default function App() {
               <Route path="/devoluciones" element={<PaginaDevoluciones />} />
               <Route path="/devoluciones/nueva" element={<PaginaNuevaDevolucion />} />
               <Route path="/devoluciones/:id" element={<PaginaDevolucion />} />
+              <Route path="/comprobantes" element={<PaginaComprobantes />} />
+              <Route path="/comprobantes/:tipo/:consecutivo" element={<PaginaComprobante />} />
               <Route element={<RutaProtegida roles={['ADMIN']} />}>
                 <Route path="/usuarios" element={<PaginaUsuarios />} />
                 <Route path="/categorias" element={<PaginaCategorias />} />
                 <Route path="/ajustes" element={<PaginaAjustes />} />
+                <Route path="/auditoria" element={<PaginaAuditoria />} />
               </Route>
               {pendientes.map((opcion) => (
                 <Route key={opcion.ruta} element={<RutaProtegida roles={opcion.roles} />}>

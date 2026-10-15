@@ -1,0 +1,49 @@
+{
+  "titulo": "Comprobantes",
+  "vacio": "No hay comprobantes que coincidan con los filtros.",
+  "filtros": "Filtros de comprobantes",
+  "buscar": "Buscar por consecutivo",
+  "campos": {
+    "tipo": "Tipo",
+    "tercero": "Cliente, proveedor o producto",
+    "usuario": "Registró",
+    "motivo": "Motivo",
+    "detalle": "Detalle"
+  },
+  "tipos": {
+    "VENTA": "Venta",
+    "COMPRA": "Compra",
+    "DEVOLUCION": "Devolución",
+    "AJUSTE": "Ajuste"
+  },
+  "tercero": {
+    "VENTA": "Cliente",
+    "COMPRA": "Proveedor",
+    "DEVOLUCION": "Cliente"
+  },
+  "referencia": {
+    "COMPRA": "Observación",
+    "DEVOLUCION": "Venta de origen"
+  },
+  "valor": {
+    "VENTA": "Precio",
+    "COMPRA": "Costo unitario",
+    "AJUSTE": "Costo unitario",
+    "DEVOLUCION": "Valor"
+  },
+  "detalle": {
+    "ACEPTADA": "Aceptada",
+    "RECHAZADA": "Rechazada",
+    "ENTRADA": "Entrada",
+    "SALIDA": "Salida"
+  },
+  "pago": {
+    "recibido": "Efectivo recibido",
+    "cambio": "Cambio"
+  },
+  "acciones": {
+    "ver": "Ver comprobante",
+    "imprimir": "Imprimir",
+    "volver": "Volver"
+  }
+}

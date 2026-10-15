@@ -4,13 +4,14 @@
  * Fecha de creación:      2026-10-15
  * Fecha de actualización: 2026-10-15
  * Autores:                Ana Sofía Nagles García, María Mercedes Rincón Valencia, Juan David Camacho Tapiero
- * Versión:                0.9.0
+ * Versión:                0.10.0
  * @file
  */
 import { useEffect, useState } from 'react';
 import { Link as EnlaceRuta, useParams } from 'react-router-dom';
 import { Alert, Box, Button, Stack, Typography } from '@mui/material';
 import ArrowBackOutlined from '@mui/icons-material/ArrowBackOutlined';
+import ReceiptLongOutlined from '@mui/icons-material/ReceiptLongOutlined';
 import BlockOutlined from '@mui/icons-material/BlockOutlined';
 import AssignmentReturnOutlined from '@mui/icons-material/AssignmentReturnOutlined';
 import { useTranslation } from 'react-i18next';
@@ -75,6 +76,7 @@ export default function PaginaVenta() {
             <ChipEstadoDocumento estado={venta.estado} />
           </Stack>
           <Stack direction="row" spacing={1} useFlexGap sx={{ flexWrap: 'wrap' }}>
+            <Button component={EnlaceRuta} to={`/comprobantes/VENTA/${venta.consecutivo}`} variant="outlined" startIcon={<ReceiptLongOutlined />}>{t('comprobantes:acciones.ver')}</Button>
             {venta.estado === 'REGISTRADA' && (
               <Button component={EnlaceRuta} to={`/devoluciones/nueva?venta=${venta.id}`} variant="outlined" startIcon={<AssignmentReturnOutlined />}>
                 {t('devoluciones:acciones.desdeVenta')}
