@@ -4,7 +4,7 @@
  * Fecha de creación:      2026-10-15
  * Fecha de actualización: 2026-10-15
  * Autores:                Ana Sofía Nagles García, María Mercedes Rincón Valencia, Juan David Camacho Tapiero
- * Versión:                0.3.0
+ * Versión:                0.4.0
  * @file
  */
 import HomeOutlined from '@mui/icons-material/HomeOutlined';
@@ -18,6 +18,7 @@ import ReceiptLongOutlined from '@mui/icons-material/ReceiptLongOutlined';
 import TuneOutlined from '@mui/icons-material/TuneOutlined';
 import PolicyOutlined from '@mui/icons-material/PolicyOutlined';
 import ManageAccountsOutlined from '@mui/icons-material/ManageAccountsOutlined';
+import CategoryOutlined from '@mui/icons-material/CategoryOutlined';
 
 /** Ambos roles. */
 const TODOS = Object.freeze(['ADMIN', 'OPERATIVO']);
@@ -38,7 +39,8 @@ export const MENU = Object.freeze([
   { ruta: '/', clave: 'menu.inicio', icono: HomeOutlined, roles: TODOS },
   { ruta: '/ventas', clave: 'menu.ventas', icono: PointOfSaleOutlined, roles: TODOS, incremento: 8 },
   { ruta: '/compras', clave: 'menu.compras', icono: ShoppingCartOutlined, roles: TODOS, incremento: 7 },
-  { ruta: '/productos', clave: 'menu.productos', icono: Inventory2Outlined, roles: TODOS, incremento: 3 },
+  { ruta: '/productos', clave: 'menu.productos', icono: Inventory2Outlined, roles: TODOS },
+  { ruta: '/categorias', clave: 'menu.categorias', icono: CategoryOutlined, roles: ADMIN },
   { ruta: '/terceros', clave: 'menu.terceros', icono: PeopleOutlined, roles: TODOS, incremento: 4 },
   { ruta: '/inventario', clave: 'menu.inventario', icono: WarehouseOutlined, roles: TODOS, incremento: 5 },
   { ruta: '/devoluciones', clave: 'menu.devoluciones', icono: AssignmentReturnOutlined, roles: TODOS, incremento: 9 },

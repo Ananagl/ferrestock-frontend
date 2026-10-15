@@ -36,7 +36,8 @@
     "comprobantes": "Comprobantes",
     "ajustes": "Ajustes",
     "auditoria": "Auditoría",
-    "usuarios": "Usuarios"
+    "usuarios": "Usuarios",
+    "categorias": "Categorías"
   },
   "usuario": {
     "menu": "Menú de {{nombre}}",
