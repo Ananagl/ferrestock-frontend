@@ -3,7 +3,7 @@
 # Fecha de creación:      2026-10-15
 # Fecha de actualización: 2026-10-15
 # Autores:                Ana Sofía Nagles García, María Mercedes Rincón Valencia, Juan David Camacho Tapiero
-# Versión:                0.13.0
+# Versión:                0.14.0
 server {
     listen ${PORT};
     root /usr/share/nginx/html;
@@ -13,6 +13,15 @@ server {
     location /api/ {
         proxy_pass ${BACKEND_ESQUEMA}://${BACKEND_HOST};
         proxy_ssl_server_name on;
+        proxy_set_header X-Forwarded-Proto https;
+    }
+    # Documentación de la API (Swagger / OpenAPI). En producción el backend solo la entrega a un ADMIN con sesión;
+    # al pasar por aquí la cookie de sesión del frontend viaja con la petición. X-Forwarded-Host hace que la
+    # especificación apunte a este dominio, así "Try it out" usa la misma sesión.
+    location ~ ^/(swagger-ui|swagger-ui\.html|v3/api-docs) {
+        proxy_pass ${BACKEND_ESQUEMA}://${BACKEND_HOST};
+        proxy_ssl_server_name on;
+        proxy_set_header X-Forwarded-Host $host;
         proxy_set_header X-Forwarded-Proto https;
     }
     location /actuator/health { proxy_pass ${BACKEND_ESQUEMA}://${BACKEND_HOST}; proxy_ssl_server_name on; }
